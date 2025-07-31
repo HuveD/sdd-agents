@@ -87,6 +87,7 @@ The SDD (Spec-Driven Development) workflow uses specialized agents instead of co
 - Instead of typing commands, simply describe what you want to do and Claude Code will invoke the appropriate agent
 - Each agent maintains specialized functionality for its role
 - Agents can be configured with different AI models for optimal performance
+- **Agent Collaboration**: Agents automatically coordinate with each other using the Task tool when issues arise (e.g., specification mismatches, technical constraints, test failures)
 
 ### Agent Workflow Steps
 
@@ -172,8 +173,15 @@ Uses the sdd-tc agent to adopt the TC (Test Code) role and create automated test
 **Features:**
 - Converts manual test cases to automated tests
 - Uses appropriate mocking for dependencies
+- **MANDATORY DEV Agent collaboration** when test suite fails
+- **Zero failures requirement** - work incomplete until full test suite passes
 - Input: Requires QA documentation and built code
 - Output: Test code in project locations (`__tests__/`, `test/`, `spec/`)
+
+**Critical Requirements:**
+- Must ensure complete test suite passes with ZERO failures
+- When individual tests pass but suite fails, MUST call DEV Agent for resolution
+- Cannot complete work while collaboration is in progress
 
 #### REV Agent - Specification Validation (sdd-rev)
 Uses the sdd-rev agent to adopt the REV (Reviewer) role and validate deliverables against SDD specifications.
@@ -596,6 +604,47 @@ Recommended quality checks between agents (manually enforced):
 ### Utility Functions
 - **Status Check** - Show workflow progress
   - Triggered by: "What's the status?", "Show progress", "Where are we?"
+
+### Sub-Agent Coordination Protocols
+
+All SDD workflow agents can call other agents using the Task tool when collaboration is needed:
+
+#### Common Collaboration Patterns
+- **ARCH → DEV**: Technical feasibility validation for architecture decisions
+- **ARCH → PM**: Requirements clarification for design decisions  
+- **ARCH → QA**: Testability validation for proposed architecture
+- **TC → DEV**: Implementation fixes for test failures (MANDATORY)
+- **DEV → PM**: Requirements clarification during implementation
+- **DEV → ARCH**: Architecture constraints during implementation
+- **DEV → QA**: Test case alignment during implementation
+- **QA → PM**: Requirements clarification for test cases
+- **QA → ARCH**: System understanding for test planning
+- **REV → [ANY]**: Issue resolution for specification compliance
+
+#### Using Task Tool for Agent Coordination
+When an agent needs to consult another agent, use the Task tool with the following pattern:
+
+```
+Task tool parameters:
+- subagent_type: "[target-agent]" (e.g., "sdd-dev", "sdd-pm", "sdd-qa", "sdd-arch", "sdd-rev")
+- description: "[Brief description of consultation need]"
+- prompt: "[Detailed consultation request with context and specific questions]"
+```
+
+#### Critical Rules for Agent Coordination
+1. **Always Use Task Tool**: Don't just mention coordination - actually invoke the tool
+2. **Provide Complete Context**: Include specification references and detailed problem descriptions
+3. **Wait for Response**: Don't proceed until consultation is complete
+4. **Document Outcomes**: Update relevant files with consultation results
+5. **Iterative Consultation**: Repeat consultation if initial response doesn't resolve the issue
+6. **Mandatory Collaboration**: Some scenarios require collaboration (e.g., TC Agent MUST call DEV Agent for test failures)
+
+#### TC Agent Special Requirements
+The TC (Test Code) Agent has enhanced collaboration requirements:
+- **MANDATORY DEV Agent Consultation**: When test suite fails but individual tests pass
+- **Zero Test Failures Rule**: Work is NOT complete until full test suite shows ZERO failures
+- **Specification Compliance First**: Always verify specification compliance before making changes
+- **Complete Collaboration**: Work cannot be marked complete while collaboration is in progress
 
 ## Support
 

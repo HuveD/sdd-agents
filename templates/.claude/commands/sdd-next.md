@@ -124,14 +124,57 @@ Analyzes todo files in `sdd/todos/` to determine workflow progress:
 3. If no todos exist, start with PM Agent (sdd-pm)
 
 ### Agent Invocation
-Uses Claude Code's Task tool with:
+Uses Claude Code's Task tool with specific parameters for each agent:
+
+#### PM Agent (sdd-pm)
 ```
-{
-  subagent_type: "[appropriate-agent]",
-  description: "Continue SDD workflow for [feature]",
-  prompt: "Continue to [next-agent] for [feature]..."
-}
+Task tool parameters:
+- subagent_type: "sdd-pm"
+- description: "Create specifications for [feature-name]"
+- prompt: "Begin PM Agent work for feature: [feature-name]. Create comprehensive specifications based on project context in sdd/context/."
 ```
+
+#### QA Agent (sdd-qa)
+```
+Task tool parameters:
+- subagent_type: "sdd-qa"
+- description: "Create test documentation for [feature-name]"
+- prompt: "Begin QA Agent work for feature: [feature-name]. Review specifications in sdd/spec/[feature]/ and create comprehensive test documentation."
+```
+
+#### ARCH Agent (sdd-arch)
+```
+Task tool parameters:
+- subagent_type: "sdd-arch"
+- description: "Design system architecture for [feature-name]"
+- prompt: "Begin ARCH Agent work for feature: [feature-name]. Review specifications in sdd/spec/[feature]/ and QA documentation in sdd/qa/[feature]/ to create system architecture."
+```
+
+#### DEV Agent (sdd-dev)
+```
+Task tool parameters:
+- subagent_type: "sdd-dev"
+- description: "Implement code for [feature-name]"
+- prompt: "Begin DEV Agent work for feature: [feature-name]. Implement code based on specifications in sdd/spec/[feature]/, architecture in sdd/arch/[feature]/, and test cases in sdd/qa/[feature]/."
+```
+
+#### TC Agent (sdd-tc)
+```
+Task tool parameters:
+- subagent_type: "sdd-tc"
+- description: "Implement automated tests for [feature-name]"
+- prompt: "Begin TC Agent work for feature: [feature-name]. Create automated tests based on QA documentation in sdd/qa/[feature]/ and implemented code."
+```
+
+#### REV Agent (sdd-rev)
+```
+Task tool parameters:
+- subagent_type: "sdd-rev"
+- description: "Review and validate [feature-name]"
+- prompt: "Begin REV Agent work for feature: [feature-name]. Validate that implementation matches specifications and all requirements are fulfilled."
+```
+
+**CRITICAL**: Always use the Task tool to invoke the appropriate subagent. Never just mention the next step - ACTUALLY call the agent using the Task tool.
 
 ### Agent Progression
 ```
