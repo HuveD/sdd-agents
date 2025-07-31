@@ -1,8 +1,10 @@
 # /sdd-next - Advance SDD Workflow to Next Agent
 
+> **Note**: Consider using `/sdd-start` for more intelligent workflow management. The `/sdd-start` command automatically analyzes your request and runs only the necessary agents, saving time and improving efficiency.
+
 ## Overview
 
-Automatically advances your SDD workflow to the next agent by detecting current progress and invoking the appropriate agent.
+Automatically advances your SDD workflow to the next agent by detecting current progress and invoking the appropriate agent. This command follows the traditional sequential workflow.
 
 ## Usage
 

@@ -21,6 +21,7 @@ The `/sdd-status` command provides:
 ## Generated: [Timestamp]
 
 ## Quick Summary
+- **Workflow Type**: [Feature Development/Documentation/Bug Fix/Refactoring]
 - **Current Agent**: [PM/QA/ARCH/DEV/TC/REV]
 - **Overall Progress**: [XX]% complete
 - **Active Todo**: [Current todo file]
@@ -38,6 +39,8 @@ The `/sdd-status` command provides:
 ### Detailed Agent Analysis
 ```markdown
 ## Agent Progress
+
+**Workflow Pattern**: [Feature → All Agents | Documentation → PM/QA/REV | Bug Fix → DEV/TC/REV | Refactoring → ARCH/DEV/TC/REV]
 
 ### ✅ PM Agent
 - **Status**: Completed
@@ -68,6 +71,10 @@ The `/sdd-status` command provides:
 - **Status**: Not Started
 - **Prerequisites**: ARCH Agent completion
 - **Estimated Duration**: 5 days
+
+### ⊗ TC Agent
+- **Status**: Skipped (Documentation workflow)
+- **Reason**: No code changes required
 
 [Additional agents...]
 ```
@@ -223,6 +230,7 @@ Generate status report file
 - ✅ **Completed**: All tasks done, deliverables created
 - 🔄 **In Progress**: Active work ongoing
 - ⏳ **Pending**: Not yet started
+- ⊗ **Skipped**: Not needed for this workflow type
 - ⏸️ **Blocked**: Waiting on dependencies
 - 🔴 **Failed**: Critical issues need resolution
 
@@ -233,9 +241,12 @@ Generate status report file
 
 ### Progress Calculation
 ```
-Overall Progress = (Completed Agents / Total Agents) × 100
+Overall Progress = (Completed Agents / Active Agents) × 100
 Agent Progress = (Completed Tasks / Total Tasks) × 100
+Active Agents = Total Agents - Skipped Agents
 ```
+
+**Note**: Skipped agents don't affect progress calculation as they're not required for the current workflow type.
 
 ## Integration with Workflow
 
@@ -244,6 +255,8 @@ The status command integrates with:
 - **Context files**: Checks sdd/context/ for project knowledge updates
 - **Deliverables**: Checks for outputs
 - **Git**: Can show commit activity
+- **Workflow Type**: Detects workflow pattern from `/sdd-start` or WORKFLOW.md
+- **Agent Selection**: Shows which agents were selected/skipped based on request type
 
 ## Automated Alerts
 

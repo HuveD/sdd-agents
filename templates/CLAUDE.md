@@ -32,6 +32,22 @@
 - "Create automated tests" → TC Agent
 - "Review everything" → REV Agent
 
+## WORKFLOW FLEXIBILITY
+
+**WORKFLOW ADAPTS TO YOUR NEEDS**: Not all steps are always necessary.
+
+### Adaptive Workflows
+- **Feature Development**: Full workflow (all agents)
+- **Documentation Update**: PM → QA → REV (skip technical agents)
+- **Bug Fix**: DEV → TC → REV (skip design agents)
+- **Refactoring**: ARCH → DEV → TC → REV (skip requirements)
+
+### Dynamic Agent Selection
+- **Automatic**: AI analyzes request and selects needed agents
+- **Smart Skipping**: Irrelevant agents bypassed automatically
+- **Just-In-Time**: Agents added when needs emerge during work
+- **REV Always Runs**: Any change triggers validation
+
 ## Language Configuration
 
 **SET WORKFLOW LANGUAGE**: Configure WORKFLOW_LANGUAGE for document generation.
@@ -215,7 +231,7 @@ graph LR
 ## GETTING STARTED
 
 1. **Initialize**: `/sdd-init project-name`
-2. **Describe need**: "I need to build..." → PM Agent
+2. **Start workflow**: `/sdd-start "your task"` or describe need directly
 3. **Follow workflow**: Agents guide you automatically
 4. **Check status**: "What's the status?" anytime
 
@@ -263,6 +279,7 @@ project/
 
 ### Commands
 - `/sdd-init [name]` - Initialize project
+- `/sdd-start [task]` - Start new workflow with automatic agent selection
 
 ### Agents (Auto-invoked by AI)
 - **sdd-pm** - Requirements (say "I need to build...")
