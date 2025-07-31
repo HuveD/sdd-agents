@@ -14,10 +14,32 @@ The `/sdd-start` command:
 
 ## What Start Does
 
-### 1. Workflow Reset
-- **Clears** all existing todos in `sdd/todos/`
-- **Resets** WORKFLOW.md to initial state
-- **Preserves** context files (project.md, stack.md, patterns.md)
+### 1. Workflow Reset (CRITICAL - MUST EXECUTE FIRST)
+**MANDATORY INITIALIZATION STEPS:**
+
+#### Clear Previous Todos
+```bash
+# Remove all existing todo files
+rm -f sdd/todos/todo-*.md
+```
+- **IMPORTANT**: Delete ALL `todo-*.md` files in `sdd/todos/` directory
+- **DO NOT** preserve any previous todo content
+- **VERIFY**: Ensure directory is empty before proceeding
+
+#### Reset WORKFLOW.md
+```bash
+# Create fresh WORKFLOW.md
+echo "# Workflow Status" > sdd/WORKFLOW.md
+```
+- **OVERWRITE**: Replace entire WORKFLOW.md content
+- **NO APPEND**: Do not add to existing content
+- **FRESH START**: Begin with clean workflow state
+
+#### Preserve Context Files
+- **KEEP**: `sdd/context/project.md`
+- **KEEP**: `sdd/context/stack.md`
+- **KEEP**: `sdd/context/patterns.md`
+- **REASON**: Context accumulates across workflows
 
 ### 2. Request Analysis
 Automatically categorizes the request:
@@ -195,3 +217,51 @@ Run `/sdd-init` first to set up the workflow structure
 4. **Smart Dependencies**: Agents know what previous agents produced
 
 Remember: Start analyzes your needs and runs only necessary agents, saving time while ensuring completeness.
+
+## Implementation Guide for AI
+
+### CRITICAL EXECUTION ORDER
+When implementing `/sdd-start`, you MUST:
+
+1. **FIRST**: Execute workflow reset
+   ```bash
+   # Step 1: Clear all todos
+   rm -f sdd/todos/todo-*.md
+   
+   # Step 2: Reset WORKFLOW.md
+   cat > sdd/WORKFLOW.md << 'EOF'
+   # Workflow Status
+   
+   ## Project: [Project Name]
+   ## Current Task: [User Request]
+   ## Start Time: [ISO Timestamp]
+   ## Status: Active
+   
+   ## Agent Progress
+   - [ ] PM Agent - Not started
+   - [ ] QA Agent - Not started
+   - [ ] ARCH Agent - Not started
+   - [ ] DEV Agent - Not started
+   - [ ] TC Agent - Not started
+   - [ ] REV Agent - Not started
+   EOF
+   ```
+
+2. **SECOND**: Analyze request type
+3. **THIRD**: Determine agent sequence
+4. **FOURTH**: Execute first agent
+
+### VERIFICATION CHECKLIST
+Before starting any agent:
+- [ ] All todo files deleted from `sdd/todos/`
+- [ ] WORKFLOW.md completely replaced (not appended)
+- [ ] Context files preserved in `sdd/context/`
+- [ ] Request type identified
+- [ ] Agent sequence determined
+
+### COMMON MISTAKES TO AVOID
+- ❌ Appending to existing WORKFLOW.md
+- ❌ Preserving old todo files
+- ❌ Starting agents before reset
+- ❌ Partial deletion of todos
+- ✅ Complete reset then start fresh
