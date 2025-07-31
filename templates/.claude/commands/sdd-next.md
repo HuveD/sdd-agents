@@ -155,13 +155,13 @@ REV Agent/sdd-rev → Workflow complete
 
 ## Integration
 
-- Use after `/init` to start workflow
-- Check `/status` for detailed state before advancing
+- Use after `/sdd-init` to start workflow
+- Check `/sdd-status` for detailed state before advancing
 - Replaces manual agent invocation
 
 ## Workflow Example
 
-1. `/init my-project`
+1. `/sdd-init my-project`
 2. "I need authentication"
 3. `/sdd-next` → checks todos, finds none → invokes PM Agent (sdd-pm)
 4. PM Agent completes (todo-spec.md 100%)

@@ -90,10 +90,10 @@ The SDD (Spec-Driven Development) workflow uses specialized agents instead of co
 
 ### Agent Workflow Steps
 
-#### `/init` - Project Initialization
+#### `/sdd-init` - Project Initialization
 Initializes project structure and prepares for todo-driven development. Automatically analyzes existing projects and creates appropriate workflow structure.
 ```
-/init [project-name]
+/sdd-init [project-name]
 ```
 - **Existing Projects**: Analyzes codebase to detect major features and suggests appropriate folder structure
 - **New Projects**: Creates basic project structure; first PM Agent invocation will create the initial feature folder
@@ -341,7 +341,7 @@ The workflow system automatically analyzes user requests to determine appropriat
 
 ### Working with Multiple Features
 - Each feature is developed independently through the workflow agents
-- `/status` shows progress across all features
+- `/sdd-status` shows progress across all features
 - Agents automatically detect the most recent or relevant feature
 - When ambiguous, the system prompts for clarification
 
@@ -378,7 +378,7 @@ The workflow system maintains a living knowledge base in `sdd/context/` that gro
 
 1. **Initialize your project**
    ```
-   /init my-awesome-project
+   /sdd-init my-awesome-project
    ```
 
 2. **Start specifications (PM role)**
@@ -411,7 +411,7 @@ The workflow system maintains a living knowledge base in `sdd/context/` that gro
 
 ### Project Structure
 
-#### Standard Structure (Created by /init)
+#### Standard Structure (Created by /sdd-init)
 ```
 project/
 ├── sdd/            # Spec-Driven Development documents
@@ -577,7 +577,7 @@ Recommended quality checks between agents (manually enforced):
 ## Agent Reference
 
 ### Initialization
-- `/init` - Initialize project structure (still a direct command)
+- `/sdd-init` - Initialize project structure (still a direct command)
 
 ### SDD Workflow Agents (Invoked Automatically)
 - **sdd-pm** - Create requirements and specifications (PM role)
@@ -600,12 +600,12 @@ Recommended quality checks between agents (manually enforced):
 ## Support
 
 For issues or questions:
-- Check `/status` for current state
+- Check `/sdd-status` for current state
 - Review agent-specific todo
 - Analyze complex issues with available tools
 - Consult team leads for workflow questions
 
-Remember: **Every journey begins with a single todo.** Start with `/init` and let the workflow guide you to successful delivery!
+Remember: **Every journey begins with a single todo.** Start with `/sdd-init` and let the workflow guide you to successful delivery!
 
 ## SDD (Spec-Driven Development) Workflow Core Principles
 

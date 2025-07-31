@@ -1,0 +1,19 @@
+# Local configuration files
+.claude/settings.local.json
+
+# Development files
+*.log
+.DS_Store
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitignore
+
+# SDD working directories (these are created by users)
+sdd/
+
+# Local test files
+test-*
+*.test.js

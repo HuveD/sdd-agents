@@ -4,7 +4,7 @@ You are using the Status command to check the current state of your AI-driven de
 
 ## Overview
 
-The `/status` command provides:
+The `/sdd-status` command provides:
 1. Current workflow agent and progress
 2. Todo completion status across all agents
 3. Key metrics and deliverables
@@ -195,25 +195,25 @@ None identified
 
 ### Basic Status Check
 ```
-/status
+/sdd-status
 ```
 Shows current workflow status
 
 ### Detailed Status
 ```
-/status --detailed
+/sdd-status --detailed
 ```
 Includes all metrics and analysis
 
 ### Agent-Specific Status  
 ```
-/status --agent arch
+/sdd-status --agent arch
 ```
 Focus on specific agent
 
 ### Export Status
 ```
-/status --export markdown
+/sdd-status --export markdown
 ```
 Generate status report file
 

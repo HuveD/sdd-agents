@@ -1,0 +1,43 @@
+{
+  "name": "sdd-agents",
+  "version": "1.0.0",
+  "description": "AI Agent Workflow System for Spec-Driven Development (SDD)",
+  "main": "lib/installer.js",
+  "bin": {
+    "sdd-agents": "./bin/sdd-agents"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "templates/"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "workflow",
+    "spec-driven-development",
+    "sdd",
+    "claude",
+    "development-tools"
+  ],
+  "author": "SDD Agents Team",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "fs-extra": "^11.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/sdd-agents.git"
+  },
+  "homepage": "https://github.com/your-org/sdd-agents#readme",
+  "bugs": {
+    "url": "https://github.com/your-org/sdd-agents/issues"
+  }
+}

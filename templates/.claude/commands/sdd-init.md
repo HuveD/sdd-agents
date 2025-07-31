@@ -4,7 +4,7 @@ You are using the Init command to initialize a project with the AI-driven develo
 
 ## Overview
 
-The `/init` command prepares your project by:
+The `/sdd-init` command prepares your project by:
 1. Analyzing the existing project structure (if any)
 2. Creating workflow directories without disrupting existing code
 3. Setting up todo-based development system
@@ -35,7 +35,7 @@ project/
 
 ### Project Analysis
 
-When run on an existing project, `/init` performs parallel analysis to:
+When run on an existing project, `/sdd-init` performs parallel analysis to:
 - Detect technology stack and frameworks
 - Identify project type (web, mobile, API, library, etc.)
 - Discover existing patterns and conventions
@@ -96,19 +96,19 @@ Discovered conventions:
 
 ### Basic Usage
 ```bash
-/init
+/sdd-init
 ```
 Initializes the current directory with workflow structure
 
 ### With Project Name
 ```bash
-/init "My Awesome Project"
+/sdd-init "My Awesome Project"
 ```
 Sets a custom project name
 
 ### With Description
 ```bash
-/init "My Project" --description "A revolutionary app"
+/sdd-init "My Project" --description "A revolutionary app"
 ```
 Adds project description to context
 
@@ -165,7 +165,7 @@ Adds project description to context
 
 ## Post-Initialization
 
-After running `/init`:
+After running `/sdd-init`:
 
 1. **Review Generated Files**:
    - Check sdd/context/ for accuracy
