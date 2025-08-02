@@ -47,7 +47,28 @@ Automatically categorizes the request:
 - **Documentation Update**: Minimal flow (PM → QA → REV, with DEV/TC if code changes needed)
 - **Bug Fix**: Direct flow (DEV → TC → REV, with PM/ARCH if design changes needed)
 - **Refactoring**: Technical flow (ARCH → DEV → TC → REV)
+- **Configuration/Setup**: Minimal flow (DEV → TC → REV)
+- **Tool/Version Updates**: Direct flow (DEV → TC → REV)
 - **Custom**: Intelligently selects agents based on specific needs
+
+### Intelligent Agent Selection Criteria
+**SKIP PM AGENT WHEN:**
+- Clear technical task with no business impact
+- Configuration or setup changes only
+- Version updates or dependency management
+- Direct implementation with obvious requirements
+
+**SKIP QA AGENT WHEN:**
+- No user-facing functionality changes
+- Internal tool configuration only
+- Development environment setup
+- Technical updates without behavior changes
+
+**SKIP ARCH AGENT WHEN:**
+- Simple configuration changes
+- Version updates within same major version
+- No architectural decisions needed
+- Following existing patterns exactly
 
 ### 3. Agent Orchestration
 - **Sequential Execution**: Each agent completes before the next
@@ -131,6 +152,20 @@ Legend: ✓ = Complete, ○ = Skipped, ⊗ = In Progress
 **Triggers**: "refactor", "optimize", "improve performance", "clean up"
 **Flow**: ARCH → DEV → TC → REV
 
+### Configuration/Setup
+**Triggers**: "configure", "setup", "install", "use [tool]", "enable"
+**Flow**: DEV → TC → REV
+**Examples**: "use FVM", "configure ESLint", "setup Docker"
+
+### Tool/Version Updates
+**Triggers**: "update to", "upgrade", "change version", "migrate to"
+**Flow**: DEV → TC → REV
+**Examples**: "update Flutter to 3.32.8", "upgrade Node.js", "migrate to React 18"
+
+### Infrastructure Changes
+**Triggers**: "deploy", "CI/CD", "pipeline", "environment"
+**Flow**: ARCH → DEV → REV (skip QA/TC for non-code changes)
+
 ## Agent Summaries
 
 Each agent completion adds a summary to WORKFLOW.md including:
@@ -195,6 +230,22 @@ Start: Detected refactoring request
       Executing: ARCH → DEV → TC → REV
 ```
 
+### Configuration/Setup
+```
+User: /sdd-start "Use FVM to run the app with Flutter version 3.32.8"
+Start: Detected configuration/setup request
+      Executing: DEV → TC → REV
+      Skipping: PM (no business requirements), QA (no user functionality), ARCH (simple setup)
+```
+
+### Tool/Version Update
+```
+User: /sdd-start "Update Flutter SDK to version 3.32.8"
+Start: Detected tool/version update request
+      Executing: DEV → TC → REV
+      Skipping: PM (technical task), QA (no user impact), ARCH (no design changes)
+```
+
 ## Error Handling
 
 ### "No sdd/ directory found"
@@ -248,8 +299,12 @@ When implementing `/sdd-start`, you MUST:
    ```
 
 2. **SECOND**: Analyze request type
-3. **THIRD**: Determine agent sequence
-4. **FOURTH**: Execute first agent
+3. **THIRD**: Determine agent sequence with intelligent filtering:
+   - Analyze request for technical vs business nature
+   - Check for user-facing functionality changes
+   - Evaluate architectural impact
+   - Apply skip criteria for each agent
+4. **FOURTH**: Execute only necessary agents
 
 ### VERIFICATION CHECKLIST
 Before starting any agent:
@@ -265,3 +320,24 @@ Before starting any agent:
 - ❌ Starting agents before reset
 - ❌ Partial deletion of todos
 - ✅ Complete reset then start fresh
+
+### AGENT BOUNDARY ENFORCEMENT
+Each agent MUST check boundaries before starting:
+```
+1. Analyze task against agent role
+2. If mismatch detected:
+   - Stop immediately
+   - Document why task doesn't match
+   - Update WORKFLOW.md with skip reason
+   - Recommend correct agent
+3. If match confirmed:
+   - Proceed with task
+   - Create appropriate todo
+```
+
+**Example Boundary Check:**
+```
+PM Agent analyzing: "Configure FVM for Flutter 3.32.8"
+Result: SKIP - Technical configuration with no business requirements
+Action: Mark as skipped in WORKFLOW.md, proceed to DEV Agent
+```

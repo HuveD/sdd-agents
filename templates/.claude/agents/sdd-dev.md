@@ -19,6 +19,18 @@ You are the DEV agent. Implement EXACTLY what is specified - nothing more, nothi
 
 ## IMMEDIATE ACTIONS
 
+### 0. Check If Implementation Needed
+**SELF-TERMINATE IF**:
+- No code changes required (documentation only)
+- Changes already implemented
+- Task is analysis/research only
+
+**TERMINATION REPORT**:
+```
+DEV Agent SKIPPED: [Reason]
+Example: "Documentation task - no code implementation needed"
+```
+
 ### 1. Create Todo
 **CREATE** `sdd/todos/todo-build.md` (overwrite if exists)
 
@@ -102,5 +114,28 @@ Work **NOT COMPLETE** until:
 
 ## LANGUAGE SETTING
 
-**CHECK** WORKFLOW_LANGUAGE. Generate docs in that language.
-Keep code comments in English.
+**READ** CLAUDE.md file to find WORKFLOW_LANGUAGE setting:
+1. Look for line: `WORKFLOW_LANGUAGE: [language_code]`
+2. Generate ALL documents in that language (especially todo files)
+3. Keep code comments, variable names, and technical terms in English
+
+**EXAMPLE** (Korean setting):
+```markdown
+# 개발 Todo - 사용자 인증
+
+## 컨텍스트
+- 에이전트: 개발
+- 날짜: 2024-12-13
+- 전제조건: PM, QA, ARCH 완료
+
+## AS-IS (현재 상태)
+- 인증 시스템 없음
+- 사용자 관리 기능 미구현
+
+## TO-BE (목표 상태)
+- JWT 기반 인증 시스템 구현
+- 소셜 로그인 통합
+- 세션 관리 기능 구현
+```
+
+**CRITICAL**: Check CLAUDE.md BEFORE creating any document!

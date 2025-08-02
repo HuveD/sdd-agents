@@ -10,6 +10,16 @@
 4. **ASK BEFORE ASSUMING** - If unclear, always ask the user
 5. **USER-DRIVEN COMPLEXITY** - Only add complexity when explicitly requested
 
+### Agent Boundary Rules
+**MANDATORY BOUNDARY ENFORCEMENT:**
+1. **ROLE BOUNDARIES ARE ABSOLUTE** - Each agent MUST operate within defined scope
+2. **IMMEDIATE STOP ON MISMATCH** - Stop work if task doesn't match agent role
+3. **REPORT BOUNDARY VIOLATIONS** - Clearly explain why task is outside scope
+4. **NO CROSS-ROLE WORK** - Never do another agent's job
+5. **INTELLIGENT TASK ROUTING** - Recommend correct agent for mismatched tasks
+6. **SELF-TERMINATE WHEN APPROPRIATE** - Skip work with no value to add
+7. **DOCUMENT CONSERVATIVELY** - Only create docs new team members need
+
 ### Agent Coordination Protocol
 **MANDATORY**: Agents MUST collaborate using Task tool when:
 - Requirements unclear (→ PM Agent)
@@ -41,12 +51,20 @@
 - **Documentation Update**: PM → QA → REV (skip technical agents)
 - **Bug Fix**: DEV → TC → REV (skip design agents)
 - **Refactoring**: ARCH → DEV → TC → REV (skip requirements)
+- **Configuration/Setup**: DEV → REV (minimal workflow)
+- **Tool/Version Updates**: DEV → TC → REV (skip non-technical agents)
 
 ### Dynamic Agent Selection
 - **Automatic**: AI analyzes request and selects needed agents
 - **Smart Skipping**: Irrelevant agents bypassed automatically
 - **Just-In-Time**: Agents added when needs emerge during work
 - **REV Always Runs**: Any change triggers validation
+
+### Request Analysis Rules
+- **Technical-only tasks**: Skip PM/QA for pure implementation
+- **No user impact**: Skip QA for internal changes
+- **Clear specifications**: Skip PM if requirements obvious
+- **Simple changes**: Minimize workflow to essential agents
 
 ## Language Configuration
 
@@ -56,7 +74,53 @@ WORKFLOW_LANGUAGE: ko  # Korean (한국어)
 ```
 Available: en, ko, ja, zh, es, fr, de, pt, ru, ar, hi, it
 
+### How Language Setting Works
+**AGENTS MUST**:
+1. **READ** this CLAUDE.md file at the start of each task
+2. **FIND** the WORKFLOW_LANGUAGE setting (line 73)
+3. **GENERATE** all documents in the specified language
+4. **KEEP** code, file paths, and technical terms in English
+
+### Language Application Examples
+**Korean (ko) Example**:
+- Document titles: `# 요구사항 문서` not `# Requirements Document`
+- Section headers: `## 핵심 기능` not `## Core Features`
+- Content: Korean descriptions with English technical terms
+- Code comments: Keep in English for maintainability
+
+**Document Structure (Korean)**:
+```markdown
+# 요구사항 문서 - 사용자 인증  # Korean title
+
+## 비즈니스 요구사항         # Korean headers
+- 사용자는 email로 로그인    # Korean content
+- JWT token 발급 필요        # English technical terms
+- session은 24시간 유지      # Mixed language OK
+
+## 기술 제약사항
+- Framework: Express.js      # Keep technical specs in English
+- Database: PostgreSQL       # Keep product names in English
+```
+
+**CRITICAL**: Language setting affects ALL agent-generated documents:
+- Todo files (`sdd/todos/`)
+- Specifications (`sdd/spec/`)
+- Test documentation (`sdd/qa/`)
+- Architecture docs (`sdd/arch/`)
+- Review reports (`sdd/review/`)
+
 ## Core Philosophy
+
+### Conservative Documentation
+**ONBOARDING TEST**: "Would a new team member need this document?"
+- **YES** → Write concise, focused documentation
+- **NO** → Skip documentation, information lives in code
+
+**Documentation Smells**:
+- Obvious information (version in package.json)
+- Setup instructions (belongs in README)
+- Configuration details (belongs in code comments)
+- Empty sections "for completeness"
 
 ### Todo-First Development
 **EVERY AGENT CREATES A TODO** with:
@@ -111,6 +175,11 @@ graph LR
 - NEVER add features without asking
 - NO technical decisions (ARCH role only)
 - Technology mentions = business constraints only
+**MUST STOP IF**:
+- Task is purely technical (e.g., version updates, config changes)
+- No business requirements to define
+- Task already has clear specifications
+- Request is for implementation only
 
 #### QA Agent (sdd-qa)  
 **CREATES**: Test documentation anyone can execute
@@ -118,6 +187,11 @@ graph LR
 - Write for zero prior knowledge
 - Specific steps with exact values
 - Must collaborate when requirements unclear
+**MUST STOP IF**:
+- Task is configuration/setup only
+- No user-facing functionality to test
+- Technical implementation without testable behavior
+- Infrastructure changes only
 
 #### ARCH Agent (sdd-arch)
 **CREATES**: System design and technical decisions
@@ -126,6 +200,11 @@ graph LR
 - Makes ALL technical choices
 - Simplest solution that works
 - Updates stack.md and patterns.md
+**MUST STOP IF**:
+- Simple configuration changes only
+- No architectural decisions needed
+- Direct implementation without design
+- Tool/version updates without system impact
 
 #### DEV Agent (sdd-dev)
 **CREATES**: Implementation code
@@ -134,6 +213,11 @@ graph LR
 - Zero unauthorized additions
 - Must complete all prerequisites
 - Calls REV Agent when done
+**MUST STOP IF**:
+- No specifications exist (call PM first)
+- Architecture unclear (call ARCH first)
+- Documentation-only changes
+- Non-code deliverables
 
 #### TC Agent (sdd-tc)
 **CREATES**: Automated test code
@@ -142,6 +226,11 @@ graph LR
 - Zero failures required for completion
 - Only fixes test code, never production
 - Uses decision tree for every failure
+**MUST STOP IF**:
+- No code to test
+- Configuration-only changes
+- Documentation updates only
+- No testable functionality
 
 #### REV Agent (sdd-rev)
 **CREATES**: Validation reports
@@ -150,6 +239,10 @@ graph LR
 - Documents every gap objectively
 - Calls other agents for fixes
 - Clear approve/reject verdict
+**MUST STOP IF**:
+- No work completed by other agents
+- Nothing to validate
+- Task cancelled or abandoned
 
 ### Status Check
 **ASK**: "What's the current status?" / "Show progress"
@@ -196,6 +289,90 @@ graph LR
 | REV | Validation Reports | `sdd/review/[feature]/` |
 
 **IMPORTANT**: `sdd` is a FOLDER, not a command.
+
+## SUBFOLDER DOCUMENT MANAGEMENT
+
+### Conservative Documentation Principle
+**CRITICAL QUESTION**: "Would a new team member need this to understand the system?"
+- **YES** → Create concise, focused documentation
+- **NO** → Skip documentation entirely
+
+### Agent Self-Termination Rules
+**AGENTS MUST STOP WHEN NO VALUE TO ADD:**
+1. **Analyze task nature** before starting
+2. **Self-terminate** if no meaningful work needed
+3. **Report termination reason** clearly
+4. **Example**: Version update → PM/QA skip with reason
+
+### Document Creation Guidelines
+
+#### PM Agent Documents
+- **requirements.md**: ONLY IF business logic/behavior changes
+- **SKIP FOR**: Version updates, config changes, tool setups
+- **CREATE FOR**: New features, behavior changes, user impact
+
+#### QA Agent Documents  
+- **test-cases.md**: ONLY IF user-facing behavior to test
+- **SKIP FOR**: Infrastructure, version updates, dev tools
+- **CREATE FOR**: Features users interact with, APIs, workflows
+
+#### ARCH Agent Documents
+- **architecture.md**: ONLY IF system design changes
+- **SKIP FOR**: Simple configs, version bumps, tool setups
+- **CREATE FOR**: New components, integrations, data flows
+
+#### REV Agent Documents
+- **validation-report.md**: ONLY IF meaningful validation performed
+- **SKIP FOR**: Agents that self-terminated
+- **CREATE FOR**: Actual implementation reviews
+
+### Examples
+
+**Version Update (Flutter 3.32.8)**:
+```
+PM Agent: SKIPPED - No business requirements
+QA Agent: SKIPPED - No user behavior changes
+ARCH Agent: SKIPPED - No design changes
+DEV Agent: Updates pubspec.yaml
+TC Agent: Runs existing tests
+REV Agent: Validates version change only
+```
+**Result**: No documentation created (new team member can see version in pubspec.yaml)
+
+**Configuration Task (FVM setup)**:
+```
+PM Agent: SKIPPED - Developer tool, no business impact
+QA Agent: SKIPPED - No testable user behavior
+ARCH Agent: Creates brief tech-decisions.md (IF team needs to know why FVM)
+DEV Agent: Implements configuration
+```
+
+**Full Feature (User Auth)**:
+```
+sdd/spec/user-auth/
+└── requirements.md      # Business needs, security requirements
+
+sdd/qa/user-auth/
+└── test-cases.md        # Login flows, security scenarios
+
+sdd/arch/user-auth/
+├── architecture.md      # Auth system design
+├── api-spec.md          # Auth endpoints
+└── db-design.md         # User tables, sessions
+```
+
+### Documentation Smell Tests
+**RED FLAGS** (Don't create):
+- "Configure X to use Y" → Configuration details belong in code/config files
+- "Update version" → Version info is in package files
+- "Install tool" → Setup instructions go in README
+- Obvious information → If it's self-evident from code
+
+**GREEN FLAGS** (Do create):
+- Business logic that isn't obvious from code
+- Design decisions with trade-offs
+- Integration points between systems
+- Security/compliance requirements
 
 ## FEATURE DETECTION
 
@@ -301,6 +478,14 @@ project/
 - TC: **Production code issues** → CALL DEV (test code issues → fix directly)
 - REV: Compliance gaps detected
 
+### Boundary Violation Protocol
+**WHEN TASK OUTSIDE SCOPE:**
+1. **STOP IMMEDIATELY** - Do not proceed with mismatched work
+2. **DOCUMENT REASON** - Explain why task doesn't match role
+3. **IDENTIFY CORRECT AGENT** - Suggest appropriate agent
+4. **CREATE HANDOFF TODO** - Document task for correct agent
+5. **REPORT TO USER** - Clearly communicate the boundary issue
+
 ### Task Tool Usage
 ```
 subagent_type: "sdd-[agent]"
@@ -328,5 +513,21 @@ prompt: "[Detailed context and questions]"
 
 ✅ **GOOD**: "Core need is verification. Correct?"
 ❌ **BAD**: "I'll add user management too" (scope creep)
+
+### Boundary Enforcement Examples
+
+**PM Agent receiving technical task:**
+```
+Task: "Update Flutter to version 3.32.8"
+PM: "STOPPING: This is a technical configuration task with no business requirements to define. 
+     Recommending: DEV Agent for implementation."
+```
+
+**QA Agent receiving infrastructure task:**
+```
+Task: "Configure FVM for Flutter version management"
+QA: "STOPPING: This is a development setup task with no user-facing functionality to test.
+     Recommending: DEV Agent for configuration."
+```
 
 **REMEMBER**: Build EXACTLY to specification. Ask before adding ANYTHING.

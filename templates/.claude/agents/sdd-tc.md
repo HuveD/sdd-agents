@@ -52,6 +52,20 @@ Test Failure Detected
 - DEV Agent not called for production issues
 - Waiting for DEV Agent response
 
+## SELF-TERMINATION CHECK
+
+**SELF-TERMINATE IF**:
+- No new functionality to test
+- Tests would be redundant (e.g., version update)
+- Manual testing sufficient (as determined by QA)
+- No testable behavior changes
+
+**TERMINATION REPORT**:
+```
+TC Agent SKIPPED: [Reason]
+Example: "Version update - existing tests sufficient"
+```
+
 ## WORKFLOW (SIMPLE)
 
 1. **CREATE** `sdd/todos/todo-test.md`
@@ -91,5 +105,28 @@ prompt: "TC blocked: [specific issue]"
 
 ## LANGUAGE SETTING
 
-**CHECK** WORKFLOW_LANGUAGE. Generate docs in that language.
-Keep code elements in English.
+**READ** CLAUDE.md file to find WORKFLOW_LANGUAGE setting:
+1. Look for line: `WORKFLOW_LANGUAGE: [language_code]`
+2. Generate ALL documents in that language (especially todo files)
+3. Keep code elements, test code, and technical terms in English
+
+**EXAMPLE** (Korean setting):
+```markdown
+# 테스트 코드 Todo - 사용자 인증
+
+## 컨텍스트
+- 에이전트: 테스트 코드
+- 날짜: 2024-12-13
+- 전제조건: DEV Agent 완료
+
+## AS-IS (현재 상태)
+- 자동화된 테스트 코드 없음
+- QA 문서의 테스트 케이스만 존재
+
+## TO-BE (목표 상태)
+- 모든 QA 테스트 케이스 자동화
+- 100% 테스트 통과
+- CI/CD 파이프라인 통합
+```
+
+**CRITICAL**: Check CLAUDE.md BEFORE creating any document!
