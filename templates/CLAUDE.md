@@ -130,6 +130,13 @@ Available: en, ko, ja, zh, es, fr, de, pt, ru, ar, hi, it
 - Validation criteria
 - Complete context for new team members
 
+**CRITICAL TODO COMPLETION RULES**:
+1. **REAL-TIME TRACKING**: Use TodoWrite tool throughout work
+2. **IMMEDIATE UPDATES**: Mark tasks `completed` as soon as done
+3. **SINGLE FOCUS**: Only ONE task `in_progress` at a time
+4. **NO ORPHANS**: All tasks must be `completed` before agent finishes
+5. **PROGRESS VISIBILITY**: User sees real-time progress updates
+
 ## SDD WORKFLOW AGENTS
 
 ### Visual Workflow
@@ -281,6 +288,21 @@ graph LR
 - [ ] Completion verification
 - [ ] Quality standards
 ```
+
+**TODO LIFECYCLE MANAGEMENT**:
+```
+CREATE → IN_PROGRESS → COMPLETED
+  ↓          ↓             ↓
+TodoWrite  TodoWrite   TodoWrite
+(pending)  (working)   (done ✓)
+```
+
+**AGENT TODO PROTOCOL**:
+1. **START**: Create todo file + TodoWrite (all tasks `pending`)
+2. **WORK**: Mark current task `in_progress` before starting
+3. **COMPLETE**: Mark task `completed` immediately when done
+4. **NEXT**: Move to next task, repeat steps 2-3
+5. **END**: All tasks must show `completed` status
 
 ## AGENT OUTPUT LOCATIONS
 
@@ -461,10 +483,12 @@ project/
 ## BEST PRACTICES
 
 1. **TODO FIRST** - Never skip todo creation
-2. **CLEAR AS-IS/TO-BE** - Be specific about current vs target
-3. **REFERENCE EVERYTHING** - Link docs, code, decisions
-4. **VALIDATE BEFORE PROCEEDING** - Complete all criteria
-5. **ITERATE WHEN NEEDED** - REV can trigger returns
+2. **REAL-TIME UPDATES** - Mark tasks completed immediately
+3. **CLEAR AS-IS/TO-BE** - Be specific about current vs target
+4. **REFERENCE EVERYTHING** - Link docs, code, decisions
+5. **VALIDATE BEFORE PROCEEDING** - Complete all criteria
+6. **ITERATE WHEN NEEDED** - REV can trigger returns
+7. **NO INCOMPLETE TODOS** - All tasks must be marked completed
 
 ## KEY POINTS
 

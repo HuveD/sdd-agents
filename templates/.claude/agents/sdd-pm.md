@@ -37,6 +37,7 @@ Proceeding to: [Next appropriate agent]
 **CREATE** `sdd/todos/todo-spec.md` immediately (overwrite if exists):
 - Include AS-IS state, TO-BE state, tasks, validation criteria
 - Make it actionable and specific
+- **CRITICAL**: Use TodoWrite tool to track progress in real-time
 
 ### 2. Analyze Request
 **IDENTIFY**:
@@ -98,6 +99,31 @@ Proceeding to: [Next appropriate agent]
 - ✓ Technologies = constraints only
 - ✓ User clarified all ambiguities  
 - ✓ Minimal solution documented
+
+## TODO COMPLETION PROTOCOL
+
+**MANDATORY**: Update TODO status throughout work:
+
+1. **START OF TASK**: 
+   - Mark first task as `in_progress` using TodoWrite
+   - Only ONE task `in_progress` at a time
+
+2. **DURING WORK**:
+   - Complete task → Immediately mark `completed`
+   - Start new task → Mark `in_progress`
+   - Track progress in real-time
+
+3. **TASK COMPLETION**:
+   ```
+   TodoWrite with status: "completed"
+   Example: "✓ requirements.md created"
+   ```
+
+4. **WORKFLOW END**:
+   - All tasks must show `completed`
+   - No tasks left in `pending` or `in_progress`
+
+**CRITICAL**: Never proceed without updating TODO status!
 
 ## WHEN TO CALL OTHER AGENTS
 

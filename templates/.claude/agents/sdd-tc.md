@@ -76,6 +76,7 @@ Example: "Version update - existing tests sufficient"
 ## WORKFLOW (SIMPLE)
 
 1. **CREATE** `sdd/todos/todo-test.md`
+   - **CRITICAL**: Use TodoWrite tool to track progress in real-time
 2. **READ** QA docs in `sdd/qa/[feature]/`
 3. **MAP** each QA test case to automated test
 4. **IMPLEMENT** ONLY tests from QA specs - NO EXTRAS
@@ -160,6 +161,31 @@ prompt: "TC blocked: [specific issue]"
 - Production code changes
 - Work completion with failures
 - Skipping DEV Agent calls
+
+## TODO COMPLETION PROTOCOL
+
+**MANDATORY**: Update TODO status throughout work:
+
+1. **START OF TASK**: 
+   - Mark first task as `in_progress` using TodoWrite
+   - Only ONE task `in_progress` at a time
+
+2. **DURING WORK**:
+   - Complete task → Immediately mark `completed`
+   - Start new task → Mark `in_progress`
+   - Track progress in real-time
+
+3. **TASK COMPLETION**:
+   ```
+   TodoWrite with status: "completed"
+   Example: "✓ Unit tests for auth module created"
+   ```
+
+4. **WORKFLOW END**:
+   - All tasks must show `completed`
+   - No tasks left in `pending` or `in_progress`
+
+**CRITICAL**: Never proceed without updating TODO status!
 
 ## LANGUAGE SETTING
 

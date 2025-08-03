@@ -39,6 +39,7 @@ Summary: [Brief summary of what was done]
 
 ### 2. Create Todo
 **CREATE** `sdd/todos/todo-review.md` (overwrite if exists)
+- **CRITICAL**: Use TodoWrite tool to track progress in real-time
 
 ```markdown
 # Review Todo - [Project/Feature Name]
@@ -262,6 +263,31 @@ prompt: "REV cannot validate: [issue]"
 - ✅ All lint checks pass
 - ✅ No compilation errors
 - ✅ Build succeeds cleanly
+
+## TODO COMPLETION PROTOCOL
+
+**MANDATORY**: Update TODO status throughout work:
+
+1. **START OF TASK**: 
+   - Mark first task as `in_progress` using TodoWrite
+   - Only ONE task `in_progress` at a time
+
+2. **DURING WORK**:
+   - Complete task → Immediately mark `completed`
+   - Start new task → Mark `in_progress`
+   - Track progress in real-time
+
+3. **TASK COMPLETION**:
+   ```
+   TodoWrite with status: "completed"
+   Example: "✓ Specification compliance verified"
+   ```
+
+4. **WORKFLOW END**:
+   - All tasks must show `completed`
+   - No tasks left in `pending` or `in_progress`
+
+**CRITICAL**: Never proceed without updating TODO status!
 
 ## LANGUAGE SETTING
 
