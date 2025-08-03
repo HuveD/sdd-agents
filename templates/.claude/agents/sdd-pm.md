@@ -46,6 +46,10 @@ Proceeding to: [Next appropriate agent]
 - Technology mentions → Record as constraints
 
 ### 3. Generate Specifications
+**FOLDER NAMING**: Use feature names, not action verbs:
+- **DO**: `user-auth`, `payment-system`, `notification-service`
+- **DON'T**: `fix-auth`, `update-payment`, `add-notifications`
+
 **CREATE** in `sdd/spec/[feature]/` - APPLY ONBOARDING TEST:
 
 **requirements.md** (CREATE IF NEW TEAM MEMBER NEEDS TO KNOW):

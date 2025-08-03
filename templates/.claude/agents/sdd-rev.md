@@ -140,6 +140,10 @@ Summary: [Brief summary of what was done]
 - Find deviations → Record all
 
 ### 4. Generate Deliverables
+**FOLDER NAMING**: Use consistent feature names:
+- **DO**: Match folders in `spec/`, `qa/`, `arch/`
+- **DON'T**: Create review-specific names
+
 **CREATE** in `sdd/review/[feature]/` - APPLY ONBOARDING TEST:
 
 **validation-report.md** (CREATE IF MEANINGFUL WORK DONE):

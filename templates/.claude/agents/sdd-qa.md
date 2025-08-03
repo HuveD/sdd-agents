@@ -57,6 +57,10 @@ Test Data: [Specific values]
 ```
 
 ### 4. Generate Deliverables
+**FOLDER NAMING**: Match PM's feature names:
+- **DO**: Use same name as `sdd/spec/[feature]/`
+- **DON'T**: Create new variations or action-based names
+
 **CREATE** in `sdd/qa/[feature]/` - APPLY ONBOARDING TEST:
 
 **test-cases.md** (CREATE IF BEHAVIOR NOT OBVIOUS):

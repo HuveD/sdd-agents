@@ -132,6 +132,10 @@ Proceeding to: [Next appropriate agent]
 - Technology choices (simplest that work)
 
 ### 3. Generate Deliverables
+**FOLDER NAMING**: Use descriptive names reflecting permanent decisions:
+- **DO**: `firebase-platform`, `auth-system`, `payment-integration`
+- **DON'T**: `firebase-fix`, `auth-bug`, `payment-patch`
+
 **CREATE** in `sdd/arch/[feature]/` - APPLY ONBOARDING TEST:
 
 **architecture.md** (CREATE IF DESIGN NOT OBVIOUS):

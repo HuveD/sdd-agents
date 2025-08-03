@@ -220,17 +220,20 @@ graph LR
 - Non-code deliverables
 
 #### TC Agent (sdd-tc)
-**CREATES**: Automated test code
+**CREATES**: Automated test code FROM QA SPECIFICATIONS ONLY
 **CRITICAL**:
-- MANDATORY DEV Agent call for failures
+- ONLY implement tests documented in QA specs
+- NO additional tests for "coverage" or "best practices"
+- Each test MUST reference QA test case ID
+- MANDATORY DEV Agent call for production failures
 - Zero failures required for completion
 - Only fixes test code, never production
 - Uses decision tree for every failure
 **MUST STOP IF**:
 - No code to test
+- No QA specifications exist
 - Configuration-only changes
 - Documentation updates only
-- No testable functionality
 
 #### REV Agent (sdd-rev)
 **CREATES**: Validation reports
@@ -292,6 +295,17 @@ graph LR
 
 ## SUBFOLDER DOCUMENT MANAGEMENT
 
+### Folder Naming Guidelines
+**CRITICAL**: Choose folder names that reflect permanent design decisions:
+- **DO**: `user-auth`, `payment-integration`, `firebase-platform`
+- **DON'T**: `auth-fix`, `payment-bug`, `firebase-fix`
+- **Pattern**: `[feature/component]-[function]` not `[feature]-[action]`
+
+**Examples**:
+- Bug fix revealing design flaw → `payment-validation` not `payment-fix`
+- Platform compatibility → `firebase-platform` not `firebase-fix`  
+- Integration strategy → `stripe-integration` not `stripe-update`
+
 ### Conservative Documentation Principle
 **CRITICAL QUESTION**: "Would a new team member need this to understand the system?"
 - **YES** → Create concise, focused documentation
@@ -346,6 +360,19 @@ QA Agent: SKIPPED - No testable user behavior
 ARCH Agent: Creates brief tech-decisions.md (IF team needs to know why FVM)
 DEV Agent: Implements configuration
 ```
+
+**Bug Fix Revealing Architecture Decision (Firebase Init Error)**:
+```
+PM Agent: SKIPPED - Technical issue, no business requirements
+QA Agent: SKIPPED - Fix restores existing behavior
+ARCH Agent: Creates sdd/arch/firebase-platform/
+├── architecture.md      # Platform-specific init strategy
+└── tech-decisions.md    # SDK version, wrapper pattern
+DEV Agent: Implements platform detection and wrapper
+TC Agent: Tests all platforms
+REV Agent: Validates architecture compliance
+```
+**Result**: Architecture documented because new team needs to understand platform strategy
 
 **Full Feature (User Auth)**:
 ```
@@ -500,8 +527,12 @@ prompt: "[Detailed context and questions]"
 4. **REPEAT** if unresolved
 
 ### TC Agent SPECIAL RULES
+- **QA Spec Compliance** → ONLY implement tests from QA docs
+- **Test Reference** → Each test MUST cite QA test case ID
+- **No Extra Tests** → FORBIDDEN to add "helpful" coverage
 - **Test code issues** → Fix directly (assertions, mocks, timing)
 - **Production code issues** → MANDATORY DEV call
+- **Missing QA specs** → Call QA Agent for specification
 - **Zero failures required** → Cannot complete with failures
 - **Decision tree** → Use for EVERY failure to determine test vs production issue
 - **Boundaries** → NEVER touch production code
