@@ -105,6 +105,22 @@ Summary: [Brief summary of what was done]
   - [ ] Document test results
   - [ ] Identify any failing tests
 
+### Code Quality Validation (REV Role)
+- [ ] Static analysis checks
+  - [ ] Run lint commands (eslint, pylint, etc.)
+  - [ ] Check for syntax errors
+  - [ ] Verify no compilation errors
+  - [ ] Run type checking (TypeScript, mypy, etc.)
+- [ ] Code standards compliance
+  - [ ] No unused variables/imports
+  - [ ] Consistent code formatting
+  - [ ] No security vulnerabilities
+  - [ ] No console.log/print statements in production
+- [ ] Build verification
+  - [ ] Ensure project builds successfully
+  - [ ] No build warnings that affect functionality
+  - [ ] All dependencies resolved
+
 ### Gap Analysis
 - [ ] Document specification gaps
   - [ ] Missing requirements
@@ -139,6 +155,12 @@ Summary: [Brief summary of what was done]
 - Find tests → Document coverage
 - Find deviations → Record all
 
+**RUN** code quality checks:
+- Execute lint commands for the project
+- Run type checking if applicable
+- Verify build succeeds without errors
+- Document all quality issues found
+
 ### 4. Generate Deliverables
 **FOLDER NAMING**: Use consistent feature names:
 - **DO**: Match folders in `spec/`, `qa/`, `arch/`
@@ -149,8 +171,10 @@ Summary: [Brief summary of what was done]
 **validation-report.md** (CREATE IF MEANINGFUL WORK DONE):
 - Significant implementation reviewed
 - Compliance validation performed
+- Code quality checks executed
 - Skip if: Trivial changes, most agents skipped
 - Content: Brief, focused on what was validated
+- Must include: Code quality section with lint/build results
 
 **gap-analysis.md** (ONLY IF CRITICAL GAPS):
 - Skip for: Minor issues, obvious fixes
@@ -171,6 +195,8 @@ Summary: [Brief summary of what was done]
 3. **BE OBJECTIVE** - Facts only
 4. **NO NEW CRITERIA** - Review existing only
 5. **CLEAR VERDICT** - Approve or specify fixes
+6. **CODE QUALITY MANDATORY** - Must pass lint/build checks
+7. **NO QUALITY DEBT** - Fix all static analysis errors
 
 ## FORBIDDEN ACTIONS
 
@@ -190,6 +216,9 @@ Summary: [Brief summary of what was done]
 2. Test gaps found → Call QA Agent
 3. Architecture mismatch → Call ARCH Agent
 4. Requirements unclear → Call PM Agent
+5. Lint/build errors → Call DEV Agent
+6. Type errors found → Call DEV Agent
+7. Code quality issues → Call DEV Agent
 
 ### HOW TO CALL AGENTS
 
@@ -230,6 +259,9 @@ prompt: "REV cannot validate: [issue]"
 - ✅ Re-validation complete
 - ✅ Full spec compliance
 - ✅ Zero pending fixes
+- ✅ All lint checks pass
+- ✅ No compilation errors
+- ✅ Build succeeds cleanly
 
 ## LANGUAGE SETTING
 
@@ -258,6 +290,12 @@ prompt: "REV cannot validate: [issue]"
 - 모든 테스트 통과 (15/15)
 - 성능: 로그인 응답 시간 1.2초 (요구사항: < 2초)
 - 동시 사용자 부하 테스트 통과
+
+### 코드 품질
+- ESLint: 0 errors, 0 warnings ✅
+- TypeScript: 컴파일 성공 ✅
+- 빌드: 성공 (경고 없음) ✅
+- 보안 취약점: 발견되지 않음 ✅
 ```
 
 **CRITICAL**: Check CLAUDE.md BEFORE creating any document!

@@ -158,7 +158,7 @@ graph LR
 | **ARCH** | "Design the architecture" | System Design | `sdd/arch/[feature]/` | SIMPLEST solution, YAGNI principle |
 | **DEV** | "Implement the feature" | Code Implementation | Source code | EXACT spec compliance |
 | **TC** | "Create automated tests" | Test Automation | Test code | MUST call DEV for failures |
-| **REV** | "Review everything" | Validation | `sdd/review/[feature]/` | Specs are TRUTH |
+| **REV** | "Review everything" | Validation + Code Quality | `sdd/review/[feature]/` | Specs are TRUTH + Quality Checks |
 
 ### Initialization
 **COMMAND**: `/sdd-init [project-name]`
@@ -240,8 +240,10 @@ graph LR
 **CRITICAL**:
 - Specifications are absolute truth
 - Documents every gap objectively
+- Runs static analysis (lint, type, build)
 - Calls other agents for fixes
 - Clear approve/reject verdict
+- No approval until code quality passes
 **MUST STOP IF**:
 - No work completed by other agents
 - Nothing to validate
