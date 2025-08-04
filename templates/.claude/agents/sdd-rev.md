@@ -169,25 +169,36 @@ Summary: [Brief summary of what was done]
 
 **CREATE** in `sdd/review/[feature]/` - APPLY ONBOARDING TEST:
 
-**validation-report.md** (CREATE IF MEANINGFUL WORK DONE):
-- Significant implementation reviewed
-- Compliance validation performed
-- Code quality checks executed
-- Skip if: Trivial changes, most agents skipped
-- Content: Brief, focused on what was validated
-- Must include: Code quality section with lint/build results
+**CRITICAL DOCUMENTATION PRINCIPLES**:
+- **ONBOARDING TEST**: "Would a new team member need this document to understand the system?"
+- **NO REPORTS**: Don't create simple reports or status updates
+- **CODE IS TRUTH**: Information available in code doesn't need documentation
+- **TODO FIRST**: Most validation work is sufficiently documented in TODO files
 
-**gap-analysis.md** (ONLY IF CRITICAL GAPS):
-- Skip for: Minor issues, obvious fixes
-- Create for: Gaps affecting system integrity
-- Onboarding test: "Would new team need to know these gaps?"
+**validation-report.md** (RARELY CREATE):
+- **CREATE ONLY IF**: New team member must know critical validation findings
+- **SKIP FOR**: 
+  - Routine compliance checks (TODO is enough)
+  - Code quality results (available in CI/CD)
+  - Simple pass/fail outcomes
+- **CONTENT IF CREATED**: 
+  - High-impact discoveries affecting system
+  - Architecture decisions to watch in future
+  - Lessons learned that prevent repetition
 
-**recommendations.md** (RARELY NEEDED):
-- Skip for: 99% of reviews
-- Create for: Systemic issues discovered
-- Better: Add brief note in validation report
+**gap-analysis.md** (ALMOST NEVER CREATE):
+- **CREATE ONLY IF**: Critical gaps affecting system integrity
+- **SKIP FOR**: Any gap that can be noted in TODO or code comments
+- **Better**: Call DEV agent to fix immediately
 
-**MINIMALIST APPROACH**: If agents did minimal work, REV does minimal documentation.
+**recommendations.md** (DO NOT CREATE):
+- **NEVER CREATE**: 99.9% unnecessary
+- **Alternative**: One-line note in validation-report or TODO
+
+**MINIMALIST APPROACH**: 
+- 90% of validation work needs only TODO completion
+- Documents only when essential for new team onboarding
+- No "proof of work" documentation
 
 ## VALIDATION RULES
 

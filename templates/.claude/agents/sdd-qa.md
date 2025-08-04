@@ -64,28 +64,48 @@ Test Data: [Specific values]
 
 **CREATE** in `sdd/qa/[feature]/` - APPLY ONBOARDING TEST:
 
-**test-cases.md** (CREATE IF BEHAVIOR NOT OBVIOUS):
-- New team member needs to understand expected behavior
-- Complex business logic requires validation
-- Critical user flows need documentation
-- Skip if: behavior is self-evident or documented in code
+**CRITICAL DOCUMENTATION PRINCIPLES**:
+- **ONBOARDING TEST**: "Would a new tester understand what to validate without this?"
+- **NO OBVIOUS TESTS**: Skip if behavior is evident from UI/code
+- **MANUAL FOCUS**: Document only what humans need to test
+- **AVOID DUPLICATION**: Don't repeat what's in requirements
+
+**test-cases.md** (CREATE ONLY WHEN NECESSARY):
+- **CREATE FOR**:
+  - Complex business logic needing validation
+  - Non-obvious edge cases
+  - Critical user paths with multiple outcomes
+  - Integration points requiring specific test data
+- **SKIP FOR**:
+  - Simple CRUD operations
+  - Standard form validations
+  - Internal tools with obvious behavior
+  - Configuration/setup tasks
+  - Features where automated tests cover everything
 
 **test-matrix.md** (RARELY CREATE):
-- Skip for: 95% of features
-- Create for: Compliance requirements, complex coverage needs
-- Onboarding test: "Would matrix help beyond test cases?"
+- **CREATE ONLY FOR**:
+  - Complex multi-dimensional testing (users × features × environments)
+  - Cross-platform compatibility requirements
+- **SKIP FOR**: 
+  - Single-dimension testing
+  - When test-cases.md is sufficient
+  - Standard browser compatibility
 
-**test-data.md** (ALMOST NEVER):
-- Skip for: Data obvious from test cases
-- Create for: Complex data generation rules
-- Better: Include data in test cases directly
+**test-data.md** (ALMOST NEVER CREATE):
+- **NEVER CREATE**: 99% unnecessary
+- **Alternative**: Include data directly in test cases
 
-**uat-scenarios.md** (SPECIAL CASES ONLY):
-- Skip for: Most features
-- Create for: Contractual UAT requirements
-- Better: Include in test-cases.md
+**uat-scenarios.md** (ALMOST NEVER CREATE):
+- **CREATE ONLY FOR**:
+  - External stakeholder sign-off required
+  - Regulatory compliance validation
+- **SKIP FOR**: 
+  - Internal projects
+  - Developer-driven acceptance
+  - When test-cases.md covers acceptance
 
-**PRINCIPLE**: One good test-cases.md > multiple sparse documents.
+**MINIMALIST APPROACH**: Most features need only test-cases.md, if any documentation at all.
 
 ### 5. Update Context
 **UPDATE** `sdd/context/project.md` with quality standards discovered

@@ -116,11 +116,21 @@ Available: en, ko, ja, zh, es, fr, de, pt, ru, ar, hi, it
 - **YES** → Write concise, focused documentation
 - **NO** → Skip documentation, information lives in code
 
+**Documentation Principles**:
+1. **NO REPORTS**: Don't create status updates or progress reports
+2. **CODE IS TRUTH**: Information available in code doesn't need docs
+3. **AVOID DUPLICATION**: Use existing docs, don't create similar ones
+4. **FEATURE-BASED FOLDERS**: Name by permanent design, not actions
+   - GOOD: `user-auth`, `payment-system`, `firebase-platform`
+   - BAD: `auth-fix`, `payment-bug`, `firebase-update`
+
 **Documentation Smells**:
 - Obvious information (version in package.json)
 - Setup instructions (belongs in README)
 - Configuration details (belongs in code comments)
 - Empty sections "for completeness"
+- Reports that prove work was done
+- Duplicate information across features
 
 ### Todo-First Development
 **EVERY AGENT CREATES A TODO** with:

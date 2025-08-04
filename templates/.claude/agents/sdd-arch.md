@@ -139,28 +139,58 @@ Proceeding to: [Next appropriate agent]
 
 **CREATE** in `sdd/arch/[feature]/` - APPLY ONBOARDING TEST:
 
-**architecture.md** (CREATE IF DESIGN NOT OBVIOUS):
-- New components or services introduced
-- Integration patterns need explanation
-- System boundaries changed
-- Skip if: Following existing patterns exactly
+**CRITICAL DOCUMENTATION PRINCIPLES**:
+- **ONBOARDING TEST**: "Can a new developer understand the system design without this?"
+- **DESIGN FOCUS**: Document WHY decisions were made, not just WHAT
+- **NO IMPLEMENTATION**: Leave code details to code comments
+- **AVOID OBVIOUS**: Don't document standard patterns or conventions
 
-**api-spec.md** (CREATE IF NEW TEAM NEEDS REFERENCE):
-- New external APIs introduced
-- Contract changes affecting other teams
-- Skip if: Internal only, no contract changes
+**architecture.md** (CREATE ONLY FOR SIGNIFICANT CHANGES):
+- **CREATE FOR**:
+  - New architectural patterns introduced
+  - System boundaries or responsibilities changed
+  - Complex integration strategies
+  - Non-standard design decisions
+- **SKIP FOR**:
+  - Following existing patterns
+  - Simple CRUD additions
+  - Standard framework usage
+  - Minor component additions
 
-**db-design.md** (CREATE IF SCHEMA KNOWLEDGE CRITICAL):
-- New data models introduced
-- Complex relationships need documentation
-- Skip if: Using existing tables, trivial changes
+**api-spec.md** (RARELY CREATE):
+- **CREATE ONLY FOR**:
+  - External-facing APIs with contracts
+  - Inter-team service boundaries
+  - Breaking changes to existing APIs
+- **SKIP FOR**:
+  - Internal APIs (document in code)
+  - Standard REST/GraphQL patterns
+  - When OpenAPI/Swagger exists
 
-**tech-decisions.md** (CREATE IF "WHY" MATTERS):
-- Trade-offs were considered
-- Future team needs to understand choices
-- Skip if: Obvious choice, no alternatives
+**db-design.md** (ALMOST NEVER CREATE):
+- **CREATE ONLY FOR**:
+  - Complex domain models with non-obvious relationships
+  - Performance-critical schema decisions
+  - Multi-tenant or sharding strategies
+- **SKIP FOR**:
+  - Simple tables or collections
+  - Standard relationships
+  - When migrations/schema files are self-documenting
 
-**ONBOARDING QUESTION**: "Can a new developer understand the system without this doc?"
+**tech-decisions.md** (ONLY FOR NON-OBVIOUS CHOICES):
+- **CREATE ONLY FOR**:
+  - Significant trade-offs evaluated
+  - Unconventional technology choices
+  - Decisions that will puzzle future developers
+- **SKIP FOR**:
+  - Industry-standard choices
+  - Following existing stack
+  - Obvious best practices
+
+**MINIMALIST APPROACH**: 
+- Most features need NO architecture docs
+- Update stack.md and patterns.md instead
+- Let code structure document the design
 
 ### 4. Update Context
 **UPDATE**:
