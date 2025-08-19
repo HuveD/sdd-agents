@@ -11,8 +11,8 @@
 .git/
 .gitignore
 
-# SDD working directories (these are created by users)
-sdd/
+# Docs working directories (these are created by users)
+docs/
 
 # Local test files
 test-*
