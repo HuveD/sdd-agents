@@ -2,7 +2,7 @@
 allowed-tools: Read, Edit, MultiEdit, Write, Bash(grep:*), Bash(rg:*), Bash(find:*), Bash(git:*), Bash(go:*), TodoWrite, Grep, Glob, LS, Task, WebSearch
 argument-hint: [review comments]
 description: Apply received code review comments after critical analysis
-model: claude-3-5-sonnet-20241022
+model: opus
 ---
 
 ## Review Feedback Analysis
