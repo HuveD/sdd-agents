@@ -69,7 +69,7 @@ Create a CLAUDE.md that intelligently merges the discovered context with SDD pri
 ```markdown
 # Project Guidelines for Claude
 
-This document combines auto-discovered project context with Spec-Driven Development (SDD) principles to guide AI-assisted development.
+These guidelines define the development standards and practices for this project, emphasizing Spec-Driven Development (SDD) principles.
 
 ## 🎯 Core SDD Development Principles
 
@@ -172,9 +172,6 @@ These principles take precedence and should guide all development decisions:
 - When in doubt, favor explicitness over implicitness
 - Ensure all code changes maintain these principles consistently
 - When auto-discovered patterns conflict with SDD principles, SDD principles take precedence
-
----
-*Generated on [DATE] by SDD-enhanced init command*
 ```
 
 ### Phase 4: Implementation Steps
@@ -182,7 +179,7 @@ These principles take precedence and should guide all development decisions:
 1. Gather all project information using the analysis commands
 2. Process and organize the discovered information
 3. Intelligently merge with SDD principles, noting where they complement or supersede discovered patterns
-4. Create the comprehensive CLAUDE.md file
+4. Create the final CLAUDE.md file without any generation metadata or timestamps
 5. Confirm creation: !`ls -la CLAUDE.md`
 6. Display success message with summary of what was discovered and configured
 
@@ -192,3 +189,5 @@ These principles take precedence and should guide all development decisions:
 - Include specific examples from the actual codebase where relevant
 - Maintain a balance between auto-discovered context and prescriptive SDD guidelines
 - Use clear section headers and formatting for easy navigation
+- The final CLAUDE.md should be a clean, professional document without any metadata, timestamps, or generation notes
+- Focus on delivering pure, actionable guidelines that serve as the definitive project standards
