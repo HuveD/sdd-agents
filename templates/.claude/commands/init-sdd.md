@@ -5,6 +5,8 @@ argument-hint: "[--overwrite] - Force overwrite existing CLAUDE.md"
 model: claude-opus-4-1-20250805
 ---
 
+ultrathink
+
 ## Initialize SDD-Enhanced Project Guidelines
 
 You are tasked with creating a comprehensive CLAUDE.md that combines auto-discovered project context (similar to the built-in /init command) with the core SDD (Spec-Driven Development) principles. This creates a richer, more context-aware guidelines document.
