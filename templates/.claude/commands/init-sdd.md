@@ -2,7 +2,7 @@
 allowed-tools: Read, Write, Bash, Glob, Grep, LS
 description: Initialize CLAUDE.md with auto-discovered project context and SDD principles (extends built-in /init)
 argument-hint: "[--overwrite] - Force overwrite existing CLAUDE.md"
-model: claude--4-1-20250805
+model: claude-opus-4-1-20250805
 ---
 
 ## Initialize SDD-Enhanced Project Guidelines

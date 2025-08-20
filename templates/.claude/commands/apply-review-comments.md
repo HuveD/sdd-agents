@@ -2,7 +2,7 @@
 allowed-tools: Read, Edit, MultiEdit, Write, Bash(grep:*), Bash(rg:*), Bash(find:*), Bash(git:*), Bash(go:*), TodoWrite, Grep, Glob, LS, Task, WebSearch
 argument-hint: [review comments]
 description: Apply received code review comments after critical analysis
-model: claude--4-1-20250805
+model: claude-opus-4-1-20250805
 ---
 
 ## Review Feedback Analysis
