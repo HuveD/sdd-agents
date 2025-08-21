@@ -86,11 +86,25 @@ These principles take precedence and should guide all development decisions:
 - Return structured results that clearly indicate success or failure states
 
 ### 3. Unit Test-Based Test-Driven Development (TDD)
-- Write tests before implementing functionality
-- Keep unit tests simple and focused - avoid complex dependencies and mocking
-- Unit tests must not access real databases, APIs, or external resources
-- Focus on clear, maintainable test cases that validate single units of functionality
-- Minimize test complexity to reduce testing overhead
+
+**Core Principle: Focus only on valuable unit tests**
+
+#### Pre-Test Planning Requirements
+- **Value Assessment**: Does this test verify actual business logic?
+- **Test Planning**: Define clear test objectives before implementation
+- **ROI Validation**: Is the value worth the test creation/maintenance cost?
+
+#### Unit Testing Core Guidelines
+- **Focus on Core Logic**: Prioritize business logic and domain rule validation
+- **Pure Functions First**: Test pure functions without external dependencies first
+- **Maintain Simplicity**: Tests shouldn't be complex enough to introduce bugs
+- **Ensure Isolation**: No real databases, APIs, or external resources
+
+#### Anti-Patterns to Avoid
+- **Excessive Mocking**: Reconsider design if >3 mocks are needed
+- **Implementation Testing**: Never test private methods or internal implementation
+- **Coverage Obsession**: Skip meaningless getter/setter tests
+- **Integration Test Overuse**: Don't use integration tests for unit-testable logic
 
 ### 4. Don't Repeat Yourself (DRY) Principle
 - Eliminate code duplication based on SRP boundaries
@@ -138,8 +152,37 @@ These principles take precedence and should guide all development decisions:
 ## 🧪 Testing Strategy
 
 [INSERT TESTING SETUP AND FRAMEWORKS]
-- Apply TDD principles as outlined above
-- Ensure all tests follow the unit test guidelines
+
+### Testing Philosophy
+**Unit Tests Only Strategy**: Achieve system stability through comprehensive unit testing of each single responsibility. Avoid integration and E2E tests due to their inherent complexity and dependency management overhead.
+
+### Why Unit Tests Only?
+- **Complete Coverage Through Isolation**: Each unit's single responsibility is thoroughly validated
+- **Maintainability**: No complex mocking chains or external dependencies
+- **Fast Feedback**: Instant test execution without setup overhead
+- **Clear Failure Points**: Precisely identifies which responsibility failed
+
+### Test Writing Checklist
+Before writing any test, verify:
+- [ ] The test validates a single responsibility
+- [ ] The test has zero external dependencies
+- [ ] The test requires minimal or no mocking
+- [ ] The test is deterministic and repeatable
+
+### When NOT to Write Tests
+- Trivial getters/setters without logic
+- Simple data transfer objects (DTOs)
+- Framework-generated code
+- Code that only calls other tested code without adding logic
+
+### Integration/E2E Test Exceptions
+Only consider non-unit tests when:
+- Critical payment processing flows
+- Security authentication boundaries
+- Data integrity at system boundaries
+Even then, minimize scope and complexity
+
+Apply TDD principles as outlined above, focusing on high-value tests only
 
 ## 📝 Coding Conventions
 
