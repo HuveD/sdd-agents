@@ -81,3 +81,15 @@ Based on the changes and project conventions, here's the appropriate commit mess
 $ARGUMENTS
 
 Note: If you specified a focus area, I've emphasized those aspects in the commit message above.
+
+## 4. Execute Commit
+
+Now I'll create the commit with the generated message:
+
+!git add -A
+
+!git commit -m "[Insert the generated commit title here]" -m "[Insert the body and footer if needed]"
+
+The commit has been created successfully. You can verify with:
+
+!git log --oneline -1
