@@ -1,6 +1,6 @@
 {
   "name": "sdd-agents",
-  "version": "1.5.11",
+  "version": "1.5.12",
   "description": "AI Agent Workflow System for Spec-Driven Development (SDD)",
   "main": "lib/installer.js",
   "bin": {
