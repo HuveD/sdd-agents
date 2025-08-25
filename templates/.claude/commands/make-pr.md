@@ -6,7 +6,7 @@ allowed-tools:
   - Grep
   - Glob
 model: claude-sonnet-4-20250514
-argument-hint: "[target-branch]"
+argument-hint: "[target-branch] (optional - defaults to repository's default branch)"
 ---
 
 # Create Comprehensive Pull Request
@@ -20,35 +20,33 @@ Determine the current branch and base branch for comparison:
 !git branch --show-current
 !git remote get-url origin 2>/dev/null || echo "No remote origin"
 
-# Find the base branch (main or master)
-!git rev-parse --verify main >/dev/null 2>&1 && echo "BASE_BRANCH=main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "BASE_BRANCH=master" || echo "BASE_BRANCH=HEAD~10")
+# Determine base branch for local diff analysis
+!if [ -n "$ARGUMENTS" ]; then BASE="$ARGUMENTS"; echo "Target branch: $BASE"; else BASE=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main"); echo "Using default branch: $BASE (GitHub will use repository default for PR)"; fi
 
 ## Step 2: Analyze Commits and Changes
 
 Gather comprehensive information about all commits in this PR:
 
-# Get merge base and commit range
-!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git merge-base HEAD $BASE 2>/dev/null || echo "No merge base found"
-
-# List commits with full details
-!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git log --pretty=format:"COMMIT: %H%nAUTHOR: %an <%ae>%nDATE: %ad%nSUBJECT: %s%nBODY: %b%n---" $BASE..HEAD 2>/dev/null
+# Get merge base and list commits with full details
+!BASE=${ARGUMENTS:-$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")}; git merge-base HEAD $BASE 2>/dev/null || echo "No merge base found"
+!BASE=${ARGUMENTS:-$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")}; git log --pretty=format:"COMMIT: %H%nAUTHOR: %an <%ae>%nDATE: %ad%nSUBJECT: %s%nBODY: %b%n---" $BASE..HEAD 2>/dev/null
 
 ## Step 3: Analyze Code Changes
 
 Get comprehensive diff information:
 
 # File statistics and change summary
-!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git diff $BASE...HEAD --stat
+!BASE=${ARGUMENTS:-$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")}; git diff $BASE...HEAD --stat
 
 # File-level changes (Added/Modified/Deleted)
-!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git diff $BASE...HEAD --name-status
+!BASE=${ARGUMENTS:-$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")}; git diff $BASE...HEAD --name-status
 
 ## Step 4: Determine PR Description Language
 
 Analyze context to determine the appropriate language for PR description:
 
 # 1. Check recent PR/commit messages language preference
-!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git log --oneline $BASE..HEAD | head -10
+!BASE=${ARGUMENTS:-$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")}; git log --oneline $BASE..HEAD | head -10
 
 # 2. Check for .github PR template language
 ![ -f .github/pull_request_template.md ] && head -20 .github/pull_request_template.md 2>/dev/null || echo "No PR template found"
@@ -69,7 +67,7 @@ Based on the above context:
 Identify test files modified in this PR:
 
 # Check for test file changes in the PR
-!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git diff $BASE...HEAD --name-only | grep -E '(test|spec)\.(js|ts|py|rb|go|java|cpp|c)$|\.(test|spec)\.(js|ts|jsx|tsx)$|_test\.(go|py)$|Test\.(java|cs)$' 2>/dev/null || echo "No test file changes in this PR"
+!BASE=${ARGUMENTS:-$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")}; git diff $BASE...HEAD --name-only | grep -E '(test|spec)\.(js|ts|py|rb|go|java|cpp|c)$|\.(test|spec)\.(js|ts|jsx|tsx)$|_test\.(go|py)$|Test\.(java|cs)$' 2>/dev/null || echo "No test file changes in this PR"
 
 # Check if tests were run
 ![ -f package.json ] && grep -q '"test"' package.json && echo "Test script available - remind reviewer to verify tests" || echo "No test configuration detected"
@@ -78,7 +76,9 @@ Identify test files modified in this PR:
 
 Based on the gathered information, create a comprehensive pull request with the following structure:
 
-1. **Determine Target Branch**: Use $ARGUMENTS if provided, otherwise use the default branch (main or master)
+1. **Determine Target Branch**: 
+   - If $ARGUMENTS is provided: Use the specified branch as target
+   - If no argument: Let GitHub automatically use the repository's default branch (no --base flag needed)
 
 2. **Language Selection Strategy**:
    - **Primary**: Follow the language of existing PR template if present
@@ -195,7 +195,8 @@ graph LR
 
 6. **Create the PR**:
    - Ensure branch is pushed: `git push -u origin HEAD`
-   - Use `gh pr create --title "[Title]" --body "[Body]" --base [target-branch]`
+   - If user specified target branch: `gh pr create --title "[Title]" --body "[Body]" --base [target-branch]`
+   - If no target specified: `gh pr create --title "[Title]" --body "[Body]"` (GitHub uses default branch automatically)
    - Auto-detect and set labels based on commit types (feat→enhancement, fix→bug, etc.)
    - Auto-assign reviewers from CODEOWNERS if available
    - Add draft flag if WIP or incomplete: `--draft`
@@ -208,7 +209,9 @@ Execute PR creation with the generated content:
 2. Push the current branch if needed:
    !git push -u origin HEAD 2>/dev/null || echo "Branch already pushed or no remote configured"
 
-3. Create PR using gh CLI with the generated title and body
+3. Create PR using gh CLI with the generated title and body:
+   - If $ARGUMENTS provided: include --base flag with the specified branch
+   - If no arguments: omit --base flag to use repository's default branch
 4. Return the PR URL to the user
 
 **Key Principles:**
