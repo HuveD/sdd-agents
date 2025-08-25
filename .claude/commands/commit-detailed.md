@@ -44,39 +44,172 @@ Identify the commit message pattern from history:
 
 ## 3. Commit Message Generation
 
-Create a commit message that:
+Create an effective commit message that balances detail with readability:
 1. **Follows the detected language** from the project history
 2. **Uses the identified convention pattern**
 3. **Maintains consistency** with recent commits
-4. **Structure**:
-   - Title: Concise summary (50-72 characters)
-   - Body: Detailed explanation (if changes are complex)
-   - Footer: References, breaking changes (if applicable)
+4. **Provides essential context** without overwhelming detail
 
 ### Analysis Results:
 Looking at the recent commits, I can see:
 - **Primary Language**: [Detected from commit history]
 - **Convention Used**: [Detected pattern]
 - **Common Prefixes/Types**: [List of used types]
-- **Message Style**: [Terse/Detailed/Mixed]
+- **Change Complexity**: [Simple/Moderate/Complex based on file count and diff size]
+
+### Adaptive Commit Message Strategy:
+
+I'll determine the appropriate level of detail based on:
+- Number of files changed
+- Complexity of changes
+- Presence of breaking changes
+- Architectural impact
+
+#### For SIMPLE changes (1-2 files, straightforward fixes):
+```
+[type]: [concise description]
+
+- Fixed [specific issue]
+- Updated [component] to [handle case]
+```
+
+#### For MODERATE changes (3-10 files, feature additions):
+```
+[type]: [clear summary of change]
+
+Context:
+[1-2 sentences: why this change was needed]
+
+Changes:
+- [Main change 1 and its purpose]
+- [Main change 2 and its purpose]
+- [Any important side effects]
+
+Testing: [How it was tested]
+```
+
+#### For COMPLEX changes (10+ files, architectural changes, breaking changes):
+```
+[type]: [comprehensive summary]
+
+## Why
+[2-3 sentences: Problem being solved, previous limitations]
+
+## What Changed
+[3-5 bullet points: Key modifications and approach]
+
+## Impact
+[Only if breaking changes or migration needed]
+
+## Key Files
+- [critical_file.js]: [Core logic change]
+- [config.json]: [New configuration added]
+[List only files with significant changes]
+
+## Testing
+[Test approach and coverage]
+
+Refs: #[issue] [related PRs]
+```
+
+### Essential Context Guidelines:
+
+**ALWAYS Include:**
+- **Why**: The problem or requirement (1-2 sentences)
+- **What**: Key changes made (bullet points)
+- **Risk**: Breaking changes or security impacts (if any)
+
+**Include When Relevant:**
+- **How**: Technical approach (only for complex logic)
+- **Testing**: Test coverage (for critical changes)
+- **References**: Related issues/PRs
+
+**AVOID:**
+- Redundant file lists (git already shows this)
+- Obvious changes ("updated version number")
+- Implementation details that are clear from code
+- Boilerplate text that adds no value
 
 ### Generated Commit Message:
 
-Based on the changes and project conventions, here's the appropriate commit message:
+Based on the analysis of [X files changed, Y insertions, Z deletions]:
 
 ```
-[Title following detected convention]
+[Title: Clear, actionable summary]
 
-[Body if needed - explaining:]
-- What changed and why
-- Impact of the changes
-- Technical details if complex
+[Context - Why This Change]
+Brief explanation of the problem or need that prompted this change.
+Focus on the "why" rather than the "what" (code shows what).
 
-[Footer if needed - references, breaking changes]
+[Key Changes]
+• Main modification and its purpose
+• Secondary change if significant
+• Any important side effects or considerations
+
+[Impact - Only if needed]
+Breaking: [describe if applicable]
+Migration: [steps if required]
+Performance: [impact if significant]
+
+[Testing - For non-trivial changes]
+Tested: [approach used]
+
+[References - If applicable]
+Issue: #XXX
+Related: #XXX
 ```
 
-### File-by-File Changes Summary:
-[List each changed file with a brief description of what changed]
+### Real Examples:
+
+**Simple Fix:**
+```
+fix: Correct null pointer exception in user authentication
+
+- Added null check before accessing user.email
+- Returns early with proper error message
+```
+
+**Feature Addition:**
+```
+feat: Add dark mode support to dashboard
+
+Context:
+Users requested dark mode for better visibility in low-light environments.
+
+Changes:
+• Implemented theme context provider with localStorage persistence
+• Added CSS variables for dynamic color switching
+• Updated all dashboard components to use theme-aware colors
+
+Testing: Manual testing on Chrome, Firefox, Safari
+```
+
+**Complex Refactor:**
+```
+refactor: Migrate authentication to JWT-based system
+
+## Why
+Session-based auth was causing scaling issues with multiple servers.
+JWT enables stateless authentication and better microservice support.
+
+## What Changed
+• Replaced session store with JWT token generation
+• Updated middleware to validate JWT instead of sessions
+• Added refresh token mechanism for security
+• Modified user model to store refresh tokens
+
+## Breaking Changes
+- API now requires Bearer token instead of cookie
+- Logout endpoint changed from DELETE to POST
+
+## Migration
+1. Update client to store JWT in localStorage
+2. Implement token refresh logic
+3. Update API calls to include Authorization header
+
+Tested: Unit tests + integration tests + staging deployment
+Refs: #1234, RFC-007
+```
 
 $ARGUMENTS
 
