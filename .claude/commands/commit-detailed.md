@@ -1,5 +1,5 @@
 ---
-model: "claude-3-5-haiku-latest"
+model: "claude-sonnet-4-20250514"
 allowed-tools:
   - Bash
 description: "Analyze git changes and generate a detailed commit message following project conventions"

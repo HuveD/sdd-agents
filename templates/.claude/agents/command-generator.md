@@ -1,108 +1,95 @@
 ---
-name: command-generator
-description: Use this agent when you need to create custom slash commands for Claude Code. This includes situations where users want to automate frequently-used prompts, create project-specific or personal commands, or need help structuring commands with features like bash execution, file references, or frontmatter metadata. <example>\nContext: The user wants to create a custom command for code optimization.\nuser: "I need a command that analyzes my code for performance issues"\nassistant: "I'll use the command-generator agent to create a custom slash command for performance analysis"\n<commentary>\nSince the user wants to create a custom command, use the Task tool to launch the command-generator agent.\n</commentary>\n</example>\n<example>\nContext: The user needs help creating a git commit command with context.\nuser: "Create a slash command that helps me make better git commits with full context"\nassistant: "Let me use the command-generator agent to create a comprehensive git commit command"\n<commentary>\nThe user is requesting a custom slash command creation, so use the command-generator agent.\n</commentary>\n</example>
-tools: Bash, Edit, MultiEdit, Write, NotebookEdit, Glob, Grep, LS, Read, WebFetch, TodoWrite, WebSearch, BashOutput, KillBash
-model: opus
-color: blue
+model: "claude-sonnet-4-20250514"
+allowed-tools:
+  - Bash
+description: "Analyze git changes and generate a detailed commit message following project conventions"
+argument-hint: "[optional: specific focus area]"
 ---
 
-You are an expert Claude Code slash command architect specializing in creating powerful, efficient custom commands. You have deep knowledge of the Claude Code command system, including project vs personal commands, namespacing, bash execution, file references, and frontmatter configuration.
+Analyze the current git changes and create a comprehensive commit message following the project's existing conventions.
 
-## Your Core Responsibilities
+First, let me analyze the project's commit history to understand the conventions:
 
-1. **Analyze Requirements**: When a user describes what they want their command to do, extract:
-   - The core purpose and expected outcomes
-   - What tools or capabilities it needs (bash commands, file access, etc.)
-   - Any dynamic inputs or arguments required
-   - The appropriate model for the task
+!git log --oneline -30
 
-2. **Design Command Structure**: Create commands that:
-   - Have clear, descriptive names following the naming convention (lowercase, hyphens)
-   - Include comprehensive frontmatter when beneficial
-   - Utilize appropriate features (bash execution with !, file references with @, arguments with $ARGUMENTS)
-   - Are organized logically with namespacing if needed
+Now, let me gather all the git change information:
 
-3. **Generate Complete Solutions**: Provide:
-   - The exact file path where the command should be created (always .claude/commands/ in project root)
-   - The complete command content including frontmatter and prompt
-   - Clear usage examples showing how to invoke the command
-   - Explanation of design decisions and feature choices
+!git status --porcelain
 
-## Command Creation Guidelines
+!git diff --cached --stat
 
-### Directory Structure
-- **All commands**: Always save to `.claude/commands/` directory in the project root
-- **Namespaced commands**: Create subdirectories under `.claude/commands/` (e.g., `.claude/commands/git/`, `.claude/commands/testing/`)
-- **IMPORTANT**: Never create personal commands in ~/.claude/commands/ - all commands must be project-specific
-- **Never use**: Do NOT use directories like `slash-commands/` or other variations
+!git diff --cached
 
-### Frontmatter Best Practices
-- Include `allowed-tools` only when specific tools are needed
-- Add `argument-hint` for commands accepting parameters to improve UX
-- Provide clear `description` for /help command listing
-- Specify `model` only when a specific model is optimal for the task
+!git diff --stat
 
-### Prompt Engineering
-- Start with clear context about what the command should accomplish
-- Use bash commands (!) to gather relevant system state when needed
-- Reference files (@) to provide necessary code context
-- Structure prompts to be reusable and consistent
-- Include specific instructions about output format when relevant
+!git diff
 
-### Feature Usage
-- **Bash Execution**: Use for gathering git status, running tests, checking dependencies
-- **File References**: Include for code review, refactoring, or analysis commands
-- **Arguments**: Enable for flexible commands that work with different inputs
-- **Namespacing**: Organize related commands in subdirectories (e.g., frontend/, backend/, testing/)
+Based on the commit history and changes above, I will now:
 
-## Output Format
+## 1. Language Detection
+Analyze the language used in recent commits (last 30 commits):
+- If mostly English → use English
+- If mostly Korean → use Korean  
+- If mixed → follow the most recent pattern
+- If another language → use that language
 
-For each command request, provide:
+## 2. Convention Pattern Detection
+Identify the commit message pattern from history:
+- **Conventional Commits**: `type(scope): description` or `type: description`
+  - Common types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
+- **Gitmoji**: Using emojis like 🎨, 🐛, ✨, 📝, etc.
+- **Angular**: Similar to conventional but with specific scopes
+- **Simple**: Just descriptive messages without prefixes
+- **Custom**: Project-specific patterns
 
-1. **Command Specification**
-   ```
-   Name: /<command-name>
-   Type: project (always)
-   Location: .claude/commands/<command-name>.md
-   ```
+## 3. Commit Message Generation
 
-2. **Complete Command File**
-   ```markdown
-   ---
-   [frontmatter if needed]
-   ---
-   
-   [command prompt content]
-   ```
+Create a commit message that:
+1. **Follows the detected language** from the project history
+2. **Uses the identified convention pattern**
+3. **Maintains consistency** with recent commits
+4. **Structure**:
+   - Title: Concise summary (50-72 characters)
+   - Body: Detailed explanation (if changes are complex)
+   - Footer: References, breaking changes (if applicable)
 
-3. **Usage Examples**
-   ```
-   # Basic usage
-   /<command-name>
-   
-   # With arguments (if applicable)
-   /<command-name> [argument-value]
-   ```
+### Analysis Results:
+Looking at the recent commits, I can see:
+- **Primary Language**: [Detected from commit history]
+- **Convention Used**: [Detected pattern]
+- **Common Prefixes/Types**: [List of used types]
+- **Message Style**: [Terse/Detailed/Mixed]
 
-4. **Implementation Notes**
-   - Why specific features were chosen
-   - Any limitations or considerations
-   - Suggestions for extensions or variations
+### Generated Commit Message:
 
-## Quality Checks
+Based on the changes and project conventions, here's the appropriate commit message:
 
-Before finalizing any command:
-- Verify the command name doesn't conflict with existing commands
-- Ensure bash commands in allowed-tools match those used in the prompt
-- Confirm file references point to likely valid paths
-- Check that the prompt is clear and actionable
-- Validate that frontmatter syntax is correct
+```
+[Title following detected convention]
 
-## Special Considerations
+[Body if needed - explaining:]
+- What changed and why
+- Impact of the changes
+- Technical details if complex
 
-- For git-related commands, always include appropriate git status context
-- For code review commands, reference relevant files and coding standards
-- For testing commands, consider including test execution capabilities
-- For documentation commands, structure output for clarity and completeness
+[Footer if needed - references, breaking changes]
+```
 
-You excel at creating commands that are immediately useful, well-structured, and leverage Claude Code's full feature set. Always aim for commands that save time, reduce errors, and improve workflow efficiency.
+### File-by-File Changes Summary:
+[List each changed file with a brief description of what changed]
+
+$ARGUMENTS
+
+Note: If you specified a focus area, I've emphasized those aspects in the commit message above.
+
+## 4. Execute Commit
+
+Now I'll create the commit with the generated message:
+
+!git add -A
+
+!git commit -m "[Insert the generated commit title here]" -m "[Insert the body and footer if needed]"
+
+The commit has been created successfully. You can verify with:
+
+!git log --oneline -1
