@@ -26,14 +26,32 @@ Now, let me gather all the git change information:
 
 Based on the commit history and changes above, I will now:
 
-## 1. Language Detection
+## 1. Change Analysis
+First, let me analyze the full scope of changes from git status output:
+
+Example analysis of git status --porcelain:
+```
+M  file1.js         → 1 modified file
+?? new-file.ts      → 1 new file
+?? another-new.md   → 1 new file
+D  deleted.css      → 1 deleted file
+```
+Result: 4 total files changed (1 modified, 2 added, 1 deleted)
+
+- **Modified files (M)**: Count files with M prefix
+- **New files (??)**: Count files with ?? prefix  
+- **Deleted files (D)**: Count files with D prefix
+- **Renamed files (R)**: Count files with R prefix
+- **Total changes**: Sum of all file changes
+
+## 2. Language Detection
 Analyze the language used in recent commits (last 30 commits):
 - If mostly English → use English
 - If mostly Korean → use Korean  
 - If mixed → follow the most recent pattern
 - If another language → use that language
 
-## 2. Convention Pattern Detection
+## 3. Convention Pattern Detection
 Identify the commit message pattern from history:
 - **Conventional Commits**: `type(scope): description` or `type: description`
   - Common types: feat, fix, docs, style, refactor, test, chore, perf, ci, build, revert
@@ -42,7 +60,7 @@ Identify the commit message pattern from history:
 - **Simple**: Just descriptive messages without prefixes
 - **Custom**: Project-specific patterns
 
-## 3. Commit Message Generation
+## 4. Commit Message Generation
 
 Create an effective commit message that balances detail with readability:
 1. **Follows the detected language** from the project history
@@ -51,21 +69,25 @@ Create an effective commit message that balances detail with readability:
 4. **Provides essential context** without overwhelming detail
 
 ### Analysis Results:
-Looking at the recent commits, I can see:
+Looking at the recent commits and current changes, I can see:
 - **Primary Language**: [Detected from commit history]
 - **Convention Used**: [Detected pattern]
 - **Common Prefixes/Types**: [List of used types]
-- **Change Complexity**: [Simple/Moderate/Complex based on file count and diff size]
+- **Files Changed**: [Total number from git status analysis]
+  - Modified: [X files]
+  - Added: [Y files]
+  - Deleted: [Z files]
+- **Change Complexity**: [Simple/Moderate/Complex based on total file count]
 
 ### Adaptive Commit Message Strategy:
 
 I'll determine the appropriate level of detail based on:
-- Number of files changed
+- Total number of files changed (including new, modified, deleted)
 - Complexity of changes
 - Presence of breaking changes
 - Architectural impact
 
-#### For SIMPLE changes (1-2 files, straightforward fixes):
+#### For SIMPLE changes (1-2 total files, straightforward fixes):
 ```
 [type]: [concise description]
 
@@ -73,7 +95,7 @@ I'll determine the appropriate level of detail based on:
 - Updated [component] to [handle case]
 ```
 
-#### For MODERATE changes (3-10 files, feature additions):
+#### For MODERATE changes (3-10 total files, feature additions):
 ```
 [type]: [clear summary of change]
 
@@ -88,7 +110,7 @@ Changes:
 Testing: [How it was tested]
 ```
 
-#### For COMPLEX changes (10+ files, architectural changes, breaking changes):
+#### For COMPLEX changes (10+ total files, architectural changes, breaking changes):
 ```
 [type]: [comprehensive summary]
 
@@ -132,10 +154,13 @@ Refs: #[issue] [related PRs]
 
 ### Generated Commit Message:
 
-Based on the analysis of [X files changed, Y insertions, Z deletions]:
+Based on the comprehensive analysis of all changes:
+- Total files affected: [X] (Modified: [A], Added: [B], Deleted: [C])
+- Lines changed: [Y insertions, Z deletions]
+- Complexity level: [Simple/Moderate/Complex]
 
 ```
-[Title: Clear, actionable summary]
+[Title: Clear, actionable summary reflecting ALL changes]
 
 [Context - Why This Change]
 Brief explanation of the problem or need that prompted this change.
@@ -143,7 +168,7 @@ Focus on the "why" rather than the "what" (code shows what).
 
 [Key Changes]
 • Main modification and its purpose
-• Secondary change if significant
+• New additions and their role
 • Any important side effects or considerations
 
 [Impact - Only if needed]
@@ -215,9 +240,17 @@ $ARGUMENTS
 
 Note: If you specified a focus area, I've emphasized those aspects in the commit message above.
 
-## 4. Execute Commit
+## 5. Contextual Analysis
 
-Now I'll create the commit with the generated message:
+Before finalizing the commit message, ensure you've considered:
+- All new files (?? prefix) - these often represent new features or components
+- Modified files (M prefix) - understand the nature of modifications
+- The relationship between new and modified files
+- Whether new files are related to modifications in existing files
+
+## 6. Execute Commit
+
+Now I'll create the commit with the generated message that reflects ALL changes:
 
 !git add -A
 

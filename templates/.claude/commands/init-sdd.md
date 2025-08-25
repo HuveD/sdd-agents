@@ -125,13 +125,53 @@ These principles take precedence and should guide all development decisions:
 - When a file or method grows too large, consider refactoring into smaller, focused units
 - Use composition and delegation to manage complexity
 
-### 7. Self-Documenting Code
+### 7. Self-Documenting Code & Comment Rules
+
+#### Core Principle: Code as Primary Documentation
 - Write code that serves as its own documentation through clear naming and structure
-- Use descriptive variable, function, and class names
-- Keep code simple and readable
-- Comments should focus on explaining "why" rather than "what"
-- Document the intent, business logic, and non-obvious decisions
-- Avoid redundant comments that merely restate what the code does
+- Minimize comments by maximizing code clarity
+- When comments are necessary, focus exclusively on "WHY" not "WHAT" or "HOW"
+
+#### Code Clarity Guidelines
+- **Explicit Naming**: Use full, descriptive names that reveal intent
+  - ✅ `calculateTotalPriceIncludingTaxAndDiscount()`
+  - ❌ `calcTotal()` or `calculate()`
+- **Small Functions**: Keep functions under 20-30 lines with single responsibility
+- **Type Hints**: Use TypeScript interfaces or Python type hints for clarity
+- **Structure Over Comments**: Extract complex logic into well-named functions
+
+#### When to Add Comments (WHY-Only Rule)
+Only add comments when code cannot express the "why":
+- **Business/Domain Requirements**: Explain regulatory or business rules
+- **Performance/Security Decisions**: Document non-obvious optimizations
+- **Temporary Solutions**: Mark workarounds with reason and resolution plan
+- **Complex Algorithms**: Explain mathematical or scientific background
+
+#### Comment Format Standard
+All comments must follow the "WHY:" template:
+```javascript
+// WHY: GDPR requires automatic deletion after 30 days for compliance
+function deleteExpiredUserData() { ... }
+
+// WHY: [PERFORMANCE] Using heap sort instead of quicksort to maintain O(n log n) for large datasets
+function sortLargeDataset(data) { ... }
+
+// WHY: [TEMP] Hardcoded due to delayed API development. TODO: Dynamic load in v2
+const apiKey = "tempKey";
+```
+
+#### Comment Tags
+- `[PERFORMANCE]`: Performance-critical decisions
+- `[SECURITY]`: Security-related logic
+- `[TEMP]`: Temporary solutions with TODO
+- `[BUSINESS]`: Business rule implementation
+- `[LEGAL]`: Legal/compliance requirements
+
+#### Anti-Patterns to Avoid
+- ❌ Comments that describe what code does: `// Increment counter`
+- ❌ Comments that become outdated: `// This function returns user data` (when it now returns orders)
+- ❌ Commented-out code without explanation
+- ❌ TODO comments without action plans or dates
 
 ## 📁 Project Structure
 
@@ -187,6 +227,49 @@ Apply TDD principles as outlined above, focusing on high-value tests only
 ## 📝 Coding Conventions
 
 [INSERT DISCOVERED CONVENTIONS]
+
+### Comment and Documentation Standards
+
+#### Comment Ratio Target
+- **Goal**: Less than 10% comment-to-code ratio
+- **Metric**: High comment ratio indicates need for code refactoring
+- **Review**: Every PR should evaluate if comments could be eliminated through better code
+
+#### Documentation Hierarchy
+1. **Code itself** (primary documentation through naming and structure)
+2. **Type definitions** (interfaces, type hints, schemas)
+3. **WHY comments** (only when code cannot express reasoning)
+4. **External docs** (README, API docs for complex systems)
+
+#### Code Review Checklist for Comments
+- [ ] Is the code self-documenting without the comment?
+- [ ] Does the comment explain WHY, not WHAT or HOW?
+- [ ] Would a better variable/function name eliminate this comment?
+- [ ] Is the comment likely to stay accurate after code changes?
+- [ ] Does the comment follow the "WHY:" template format?
+
+### Implementation Examples
+
+```typescript
+// ❌ BAD: Redundant comment
+// Get user by ID
+function getUserById(id: string) { ... }
+
+// ✅ GOOD: Self-documenting
+function getUserById(userId: string): User | null { ... }
+
+// ❌ BAD: Explaining WHAT
+// Loop through users and filter active ones
+const active = users.filter(u => u.status === 'active');
+
+// ✅ GOOD: Explaining WHY when necessary
+// WHY: [BUSINESS] Active status expires after 90 days per subscription terms
+const activeUsers = users.filter(u => 
+  u.status === 'active' && 
+  daysSince(u.lastActivity) < 90
+);
+```
+
 - These conventions should align with SDD principles
 - When conflicts arise, SDD principles take precedence
 
@@ -206,7 +289,16 @@ Apply TDD principles as outlined above, focusing on high-value tests only
 4. Use Result patterns for error handling
 5. Apply DRY principle within responsibility boundaries
 6. Follow YAGNI - implement only what's specified
-7. Ensure code is self-documenting
+7. Ensure code is self-documenting:
+   - Write code that doesn't need comments
+   - Add WHY comments only when business logic isn't obvious
+   - Review and remove outdated comments during refactoring
+
+### Comment Maintenance Process
+1. **Before Adding Comments**: Try to refactor code to be self-explanatory
+2. **During Code Review**: Question every comment's necessity
+3. **During Refactoring**: Update or remove comments that no longer apply
+4. **Quarterly Audit**: Review codebase for comment quality and relevance
 
 ## 📌 Implementation Notes
 
@@ -215,6 +307,20 @@ Apply TDD principles as outlined above, focusing on high-value tests only
 - When in doubt, favor explicitness over implicitness
 - Ensure all code changes maintain these principles consistently
 - When auto-discovered patterns conflict with SDD principles, SDD principles take precedence
+
+### Comment Quality Standards
+- **Enforcement**: Use linters to flag TODO without dates, commented code without explanation
+- **CI/CD Integration**: Automated checks for comment patterns and ratios
+- **Team Agreement**: All comments must pass the "future developer test" - would someone understand the WHY in 6 months?
+- **Living Documentation**: Comments are code - they must be maintained, tested for relevance, and refactored
+
+### Comment Anti-Pattern Detection
+Automatically flag and review:
+- Files with >15% comment ratio
+- Comments without "WHY:" prefix
+- TODO comments older than 30 days
+- Commented-out code blocks
+- Comments that duplicate function/variable names
 ```
 
 ### Phase 4: Implementation Steps
