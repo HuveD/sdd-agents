@@ -61,6 +61,7 @@ Based on your critical analysis:
      - **Group C**: Isolated bug fixes or optimizations
    - Identify sequential dependencies where parallel execution isn't possible
    - Estimate complexity (Low/Medium/High) for each group
+   - **CRITICAL**: Prepare to launch ALL independent groups in a SINGLE message with multiple Task calls
 
 ### Phase 3: Parallel Agent Assignment & Execution
 
@@ -69,21 +70,29 @@ Based on your critical analysis:
    - Define clear scope and deliverables for each agent
    - Specify file access requirements and constraints
 
-2. **Parallel Execution using Task Tool**:
-   ```
-   Use the Task tool to launch multiple agents simultaneously:
+2. **Parallel Execution Strategy**:
+   **CRITICAL**: You MUST launch ALL independent agents simultaneously in a SINGLE message for true parallel execution.
    
-   - Agent 1: Handle Group A changes
-     Context: [specific files, functions, requirements]
-     
-   - Agent 2: Handle Group B changes  
-     Context: [specific files, functions, requirements]
-     
-   - Agent 3: Handle Group C changes
-     Context: [specific files, functions, requirements]
+   Example structure for launching 3 independent groups:
+   ```
+   "I'll now launch all agents in parallel to work on their independent groups simultaneously."
+   
+   [Task Tool Call 1]: Agent for Group A
+   [Task Tool Call 2]: Agent for Group B  
+   [Task Tool Call 3]: Agent for Group C
+   
+   All above Task calls must be in the SAME message, executed at once.
    ```
    
-   **IMPORTANT**: All independent agents must be launched in a single Task tool call for true parallel execution. Do NOT call agents sequentially.
+   **FORBIDDEN PATTERNS**:
+   - ❌ "Let me first launch Agent A..." [Task call] "Now Agent B..." [Task call]
+   - ❌ "Starting with Group A..." [Task call] "Next, Group B..." [Task call]
+   - ❌ Sequential messages with individual Task calls
+   
+   **REQUIRED PATTERN**:
+   - ✅ Single message containing multiple Task tool invocations
+   - ✅ All Task calls batched together for simultaneous execution
+   - ✅ No intermediate text between Task calls suggesting sequence
 
 3. **Agent Work Instructions**:
    Each agent should:
@@ -93,9 +102,10 @@ Based on your critical analysis:
    - Report completion status and any issues encountered
 
 4. **Synchronization Point**:
-   - Wait for all parallel agents to complete
-   - Collect results from each agent
+   - After launching all parallel agents, wait for ALL to complete
+   - Collect results from each agent simultaneously
    - Identify any conflicts or integration issues
+   - Do NOT proceed until all parallel agents have finished
 
 ### Phase 4: Integration & Verification
 
@@ -138,9 +148,10 @@ Provide your analysis and actions in the following structure:
    - Parallel execution feasibility confirmed
 
 3. **Parallel Agent Execution**
-   - Agent assignments and launch command
-   - Real-time status tracking
-   - Completion confirmation from each agent
+   - Single message containing ALL Task tool calls
+   - Simultaneous launch confirmation for all agents
+   - Real-time parallel status tracking (not sequential)
+   - Completion confirmation from ALL agents before proceeding
 
 4. **Integration Report**
    - Changes from each agent summarized
@@ -163,10 +174,25 @@ Provide your analysis and actions in the following structure:
 
 2. **Parallel Efficiency**: Maximize parallel execution by identifying truly independent work groups. The more agents working simultaneously, the faster the completion.
 
-3. **Task Tool Usage**: Always use the Task tool to launch multiple agents in a single call for true parallel processing. Sequential agent calls defeat the purpose of this workflow.
+3. **Task Tool Usage - CRITICAL REQUIREMENT**:
+   - **MUST**: Launch ALL independent agents in a SINGLE message with multiple Task tool calls
+   - **MUST**: Use the capability to call multiple tools in a single response
+   - **MUST NOT**: Launch agents one by one in separate messages
+   - **MUST NOT**: Use phrases like "Now let me launch the next agent" between Task calls
+   - Example of CORRECT parallel launch:
+     ```
+     "Launching all 3 agents simultaneously for parallel execution:"
+     [Task 1] [Task 2] [Task 3] <- All in same message
+     ```
 
 4. **Quality Over Speed**: While parallel execution improves speed, maintain quality through proper verification and iteration when needed.
 
 5. **Clear Communication**: Each agent needs precise, unambiguous instructions to work independently without conflicts.
 
-Remember: The goal is to leverage parallel processing to dramatically reduce implementation time while maintaining or improving code quality through systematic verification and iteration.
+6. **Parallel Execution Verification**:
+   - Count the number of independent groups identified
+   - Ensure that exact number of Task calls are made in a SINGLE message
+   - Monitor all agents simultaneously, not sequentially
+   - Only proceed to integration after ALL agents complete
+
+Remember: The goal is to leverage TRUE parallel processing (multiple Task calls in one message) to dramatically reduce implementation time while maintaining or improving code quality through systematic verification and iteration.
