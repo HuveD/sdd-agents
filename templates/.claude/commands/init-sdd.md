@@ -1,7 +1,6 @@
 ---
 allowed-tools: Read, Write, Bash, Glob, Grep, LS
-description: Initialize CLAUDE.md with auto-discovered project context and SDD principles (extends built-in /init)
-argument-hint: "[--overwrite] - Force overwrite existing CLAUDE.md"
+description: Initialize CLAUDE.md with SDD principles and current project context
 model: claude-opus-4-1-20250805
 ---
 
@@ -9,67 +8,50 @@ ultrathink
 
 ## Initialize SDD-Enhanced Project Guidelines
 
-You are tasked with creating a comprehensive CLAUDE.md that combines auto-discovered project context (similar to the built-in /init command) with the core SDD (Spec-Driven Development) principles. This creates a richer, more context-aware guidelines document.
+Create a CLAUDE.md file that establishes SDD (Spec-Driven Development) principles and captures essential project context for the current codebase.
 
-### Phase 1: Check Existing File
+### Phase 1: File Management
 
-First, check if CLAUDE.md already exists:
-!`ls -la CLAUDE.md 2>/dev/null || echo "File does not exist"`
+Always overwrite existing CLAUDE.md file without confirmation - this ensures the latest SDD principles and current project context are applied.
 
-If CLAUDE.md exists and the user hasn't passed "--overwrite" in `$ARGUMENTS`:
-- Inform the user that CLAUDE.md already exists
-- Ask for explicit confirmation before overwriting
-- Only proceed if the user confirms or if "--overwrite" was provided
+### Phase 2: Current Project Analysis
 
-### Phase 2: Project Analysis (Similar to Built-in /init)
-
-Perform comprehensive project analysis to understand:
+Analyze only what currently exists in the project:
 
 1. **Project Structure**:
-   - Analyze directory structure: !`find . -type d -name node_modules -prune -o -type d -print | head -30`
-   - Identify main source directories
-   - Detect project type and framework
+   - Examine actual directory structure: !`find . -type d -name node_modules -prune -o -type d -print | head -20`
+   - Identify existing source directories
 
 2. **Technology Stack**:
    - Check package.json for Node.js projects: @package.json
    - Check requirements.txt or pyproject.toml for Python projects
    - Check go.mod for Go projects
    - Check Cargo.toml for Rust projects
-   - Analyze file extensions to determine primary languages
 
-3. **Dependencies & Frameworks**:
-   - Extract and list key dependencies
-   - Identify framework patterns (React, Vue, Express, Django, etc.)
-   - Note testing frameworks in use
+3. **Current Dependencies**:
+   - List actual installed dependencies
+   - Identify frameworks currently in use
 
-4. **Coding Conventions**:
-   - Check for existing config files (.eslintrc, .prettierrc, tsconfig.json, etc.)
-   - Analyze code style from sample files
-   - Detect naming conventions (camelCase, snake_case, etc.)
+4. **Existing Conventions**:
+   - Check for config files (.eslintrc, .prettierrc, tsconfig.json, etc.)
+   - Analyze actual code patterns from existing files
 
-5. **Testing Setup**:
-   - Look for test directories and files
-   - Identify testing frameworks
-   - Check test coverage configuration
+5. **Testing Infrastructure**:
+   - Identify existing test files and frameworks
+   - Note current test scripts and commands
 
-6. **Build & Deployment**:
-   - Check for CI/CD configuration (.github/workflows, .gitlab-ci.yml, etc.)
-   - Identify build scripts and tools
-   - Note deployment configurations
+6. **Key Project Files**:
+   - List critical configuration files that exist
+   - Identify actual entry points
 
-7. **Key Files**:
-   - List and describe important configuration files
-   - Identify entry points and main modules
-   - Note documentation files
+### Phase 3: Create CLAUDE.md
 
-### Phase 3: Create Comprehensive CLAUDE.md
-
-Create a CLAUDE.md that intelligently merges the discovered context with SDD principles:
+Generate CLAUDE.md with SDD principles and discovered project context:
 
 ```markdown
 # Project Guidelines for Claude
 
-These guidelines define the development standards and practices for this project, emphasizing Spec-Driven Development (SDD) principles.
+This document defines development standards based on Spec-Driven Development (SDD) principles and current project implementation.
 
 ## 🎯 Core SDD Development Principles
 
@@ -89,22 +71,17 @@ These principles take precedence and should guide all development decisions:
 
 **Core Principle: Focus only on valuable unit tests**
 
-#### Pre-Test Planning Requirements
-- **Value Assessment**: Does this test verify actual business logic?
-- **Test Planning**: Define clear test objectives before implementation
-- **ROI Validation**: Is the value worth the test creation/maintenance cost?
-
-#### Unit Testing Core Guidelines
-- **Focus on Core Logic**: Prioritize business logic and domain rule validation
-- **Pure Functions First**: Test pure functions without external dependencies first
-- **Maintain Simplicity**: Tests shouldn't be complex enough to introduce bugs
+#### Unit Testing Guidelines
+- **Focus on Core Logic**: Test business logic and domain rules
+- **Pure Functions First**: Test pure functions without external dependencies
+- **Maintain Simplicity**: Tests should be simple and maintainable
 - **Ensure Isolation**: No real databases, APIs, or external resources
 
-#### Anti-Patterns to Avoid
-- **Excessive Mocking**: Reconsider design if >3 mocks are needed
-- **Implementation Testing**: Never test private methods or internal implementation
-- **Coverage Obsession**: Skip meaningless getter/setter tests
-- **Integration Test Overuse**: Don't use integration tests for unit-testable logic
+#### What NOT to Test
+- Trivial getters/setters without logic
+- Simple data transfer objects
+- Framework-generated code
+- Private methods or internal implementation
 
 ### 4. Don't Repeat Yourself (DRY) Principle
 - Eliminate code duplication based on SRP boundaries
@@ -114,10 +91,9 @@ These principles take precedence and should guide all development decisions:
 - Extract common functionality into shared modules when appropriate
 
 ### 5. You Aren't Gonna Need It (YAGNI) Principle
-- Strictly follow the specifications without over-engineering
-- Do not implement features not explicitly required in the specification
-- Avoid adding "nice-to-have" features without explicit requirements
-- When improvements are necessary, request specification updates rather than implementing beyond scope
+- Follow specifications without over-engineering
+- Implement only what is explicitly required
+- Avoid adding features without clear requirements
 
 ### 6. Maintain Concise Code Length
 - Keep methods under 15 lines whenever possible
@@ -147,17 +123,14 @@ Only add comments when code cannot express the "why":
 - **Temporary Solutions**: Mark workarounds with reason and resolution plan
 - **Complex Algorithms**: Explain mathematical or scientific background
 
-#### Comment Format Standard
-All comments must follow the "WHY:" template:
+#### Comment Format
+Comments should explain WHY, not WHAT:
 ```javascript
-// WHY: GDPR requires automatic deletion after 30 days for compliance
+// WHY: Regulatory requirement for data retention
 function deleteExpiredUserData() { ... }
 
-// WHY: [PERFORMANCE] Using heap sort instead of quicksort to maintain O(n log n) for large datasets
+// WHY: Performance optimization for large datasets
 function sortLargeDataset(data) { ... }
-
-// WHY: [TEMP] Hardcoded due to delayed API development. TODO: Dynamic load in v2
-const apiKey = "tempKey";
 ```
 
 #### Comment Tags
@@ -175,168 +148,75 @@ const apiKey = "tempKey";
 
 ## 📁 Project Structure
 
-[INSERT DISCOVERED PROJECT STRUCTURE HERE]
+[AUTO-DISCOVERED PROJECT STRUCTURE]
 
 ## 🛠 Technology Stack
 
-[INSERT DISCOVERED TECHNOLOGIES, LANGUAGES, AND FRAMEWORKS]
+[AUTO-DISCOVERED FROM PROJECT FILES]
 
 ## 📦 Dependencies
 
-[INSERT KEY DEPENDENCIES AND THEIR PURPOSES]
+[ACTUAL DEPENDENCIES FROM PACKAGE FILES]
 
-## 🏗 Architecture Patterns
+## 🧪 Testing Configuration
 
-[INSERT DISCOVERED PATTERNS AND ARCHITECTURAL DECISIONS]
+[EXISTING TEST SETUP FROM PROJECT]
 
-## 🧪 Testing Strategy
-
-[INSERT TESTING SETUP AND FRAMEWORKS]
-
-### Testing Philosophy
-**Unit Tests Only Strategy**: Achieve system stability through comprehensive unit testing of each single responsibility. Avoid integration and E2E tests due to their inherent complexity and dependency management overhead.
-
-### Why Unit Tests Only?
-- **Complete Coverage Through Isolation**: Each unit's single responsibility is thoroughly validated
-- **Maintainability**: No complex mocking chains or external dependencies
-- **Fast Feedback**: Instant test execution without setup overhead
-- **Clear Failure Points**: Precisely identifies which responsibility failed
-
-### Test Writing Checklist
-Before writing any test, verify:
-- [ ] The test validates a single responsibility
-- [ ] The test has zero external dependencies
-- [ ] The test requires minimal or no mocking
-- [ ] The test is deterministic and repeatable
-
-### When NOT to Write Tests
-- Trivial getters/setters without logic
-- Simple data transfer objects (DTOs)
-- Framework-generated code
-- Code that only calls other tested code without adding logic
-
-### Integration/E2E Test Exceptions
-Only consider non-unit tests when:
-- Critical payment processing flows
-- Security authentication boundaries
-- Data integrity at system boundaries
-Even then, minimize scope and complexity
-
-Apply TDD principles as outlined above, focusing on high-value tests only
+### Testing Standards
+- Focus on unit tests for business logic
+- Test pure functions without external dependencies
+- Skip trivial getters/setters and DTOs
+- Maintain test isolation and simplicity
 
 ## 📝 Coding Conventions
 
-[INSERT DISCOVERED CONVENTIONS]
+[DISCOVERED FROM EXISTING CODE]
 
-### Comment and Documentation Standards
+### Comment Standards
+- Write self-documenting code
+- Comments explain WHY, not WHAT
+- Minimize comment-to-code ratio
+- Use clear naming to reduce need for comments
 
-#### Comment Ratio Target
-- **Goal**: Less than 10% comment-to-code ratio
-- **Metric**: High comment ratio indicates need for code refactoring
-- **Review**: Every PR should evaluate if comments could be eliminated through better code
-
-#### Documentation Hierarchy
-1. **Code itself** (primary documentation through naming and structure)
-2. **Type definitions** (interfaces, type hints, schemas)
-3. **WHY comments** (only when code cannot express reasoning)
-4. **External docs** (README, API docs for complex systems)
-
-#### Code Review Checklist for Comments
-- [ ] Is the code self-documenting without the comment?
-- [ ] Does the comment explain WHY, not WHAT or HOW?
-- [ ] Would a better variable/function name eliminate this comment?
-- [ ] Is the comment likely to stay accurate after code changes?
-- [ ] Does the comment follow the "WHY:" template format?
-
-### Implementation Examples
-
-```typescript
-// ❌ BAD: Redundant comment
-// Get user by ID
-function getUserById(id: string) { ... }
-
-// ✅ GOOD: Self-documenting
-function getUserById(userId: string): User | null { ... }
-
-// ❌ BAD: Explaining WHAT
-// Loop through users and filter active ones
-const active = users.filter(u => u.status === 'active');
-
-// ✅ GOOD: Explaining WHY when necessary
-// WHY: [BUSINESS] Active status expires after 90 days per subscription terms
-const activeUsers = users.filter(u => 
-  u.status === 'active' && 
-  daysSince(u.lastActivity) < 90
-);
-```
-
-- These conventions should align with SDD principles
-- When conflicts arise, SDD principles take precedence
+- Align conventions with SDD principles
+- SDD principles take precedence when conflicts arise
 
 ## 🚀 Build & Deployment
 
-[INSERT BUILD AND DEPLOYMENT CONFIGURATION]
+[CURRENT BUILD CONFIGURATION]
 
-## 📄 Key Files and Directories
+## 📄 Key Files
 
-[INSERT IMPORTANT FILES WITH DESCRIPTIONS]
+[EXISTING PROJECT FILES]
 
 ## 🔄 Development Workflow
 
-1. Always start with clear specifications
-2. Apply TDD by writing tests first
-3. Implement following SRP and keeping code concise
+1. Start with specifications
+2. Write tests for business logic
+3. Implement following SRP
 4. Use Result patterns for error handling
-5. Apply DRY principle within responsibility boundaries
+5. Apply DRY within responsibility boundaries
 6. Follow YAGNI - implement only what's specified
-7. Ensure code is self-documenting:
-   - Write code that doesn't need comments
-   - Add WHY comments only when business logic isn't obvious
-   - Review and remove outdated comments during refactoring
-
-### Comment Maintenance Process
-1. **Before Adding Comments**: Try to refactor code to be self-explanatory
-2. **During Code Review**: Question every comment's necessity
-3. **During Refactoring**: Update or remove comments that no longer apply
-4. **Quarterly Audit**: Review codebase for comment quality and relevance
+7. Write self-documenting code
 
 ## 📌 Implementation Notes
 
-- Always verify existing implementations before creating new code
-- Prioritize clarity and maintainability over clever solutions
-- When in doubt, favor explicitness over implicitness
-- Ensure all code changes maintain these principles consistently
-- When auto-discovered patterns conflict with SDD principles, SDD principles take precedence
-
-### Comment Quality Standards
-- **Enforcement**: Use linters to flag TODO without dates, commented code without explanation
-- **CI/CD Integration**: Automated checks for comment patterns and ratios
-- **Team Agreement**: All comments must pass the "future developer test" - would someone understand the WHY in 6 months?
-- **Living Documentation**: Comments are code - they must be maintained, tested for relevance, and refactored
-
-### Comment Anti-Pattern Detection
-Automatically flag and review:
-- Files with >15% comment ratio
-- Comments without "WHY:" prefix
-- TODO comments older than 30 days
-- Commented-out code blocks
-- Comments that duplicate function/variable names
+- Verify existing implementations before creating new code
+- Prioritize clarity and maintainability
+- Favor explicitness over implicitness
+- SDD principles take precedence over discovered patterns
 ```
 
-### Phase 4: Implementation Steps
+### Phase 4: Implementation
 
-1. Gather all project information using the analysis commands
-2. Process and organize the discovered information
-3. Intelligently merge with SDD principles, noting where they complement or supersede discovered patterns
-4. Create the final CLAUDE.md file without any generation metadata or timestamps
-5. Confirm creation: !`ls -la CLAUDE.md`
-6. Display success message with summary of what was discovered and configured
+1. Gather current project information using analysis commands
+2. Organize discovered information about existing implementation
+3. Merge with SDD principles (SDD takes precedence)
+4. Create CLAUDE.md file (always overwrite existing)
+5. Display confirmation of created guidelines
 
-### Important Notes
-- The SDD principles section should always appear prominently at the beginning
-- When discovered patterns conflict with SDD principles, clearly note that SDD takes precedence
-- Include specific examples from the actual codebase where relevant
-- Maintain a balance between auto-discovered context and prescriptive SDD guidelines
-- Use clear section headers and formatting for easy navigation
-- The final CLAUDE.md should be a clean, professional document without any metadata, timestamps, or generation notes
-- Focus on delivering pure, actionable guidelines that serve as the definitive project standards
+### Key Points
+- Focus on actual implementation, not future plans
+- SDD principles always take precedence
+- Document only what exists in the current codebase
+- Keep guidelines actionable and project-neutral
