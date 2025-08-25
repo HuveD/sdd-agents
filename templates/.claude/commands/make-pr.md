@@ -13,59 +13,79 @@ argument-hint: "[target-branch]"
 
 You are tasked with creating a detailed and comprehensive pull request that provides maximum context to reviewers. Analyze all commits, code changes, and generate a structured PR description that helps reviewers understand the changes at a glance.
 
-## Step 1: Gather Git Information
+## Step 1: Identify Context and Base Branch
 
-First, collect all necessary git information:
+Determine the current branch and base branch for comparison:
 
-!git status --porcelain
 !git branch --show-current
 !git remote get-url origin 2>/dev/null || echo "No remote origin"
-!git log --oneline -20
-!git diff --stat HEAD~1..HEAD 2>/dev/null || git diff --stat main...HEAD 2>/dev/null || git diff --stat master...HEAD 2>/dev/null
 
-## Step 2: Analyze Branch Divergence
+# Find the base branch (main or master)
+!git rev-parse --verify main >/dev/null 2>&1 && echo "BASE_BRANCH=main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "BASE_BRANCH=master" || echo "BASE_BRANCH=HEAD~10")
 
-Determine the base branch and analyze all commits since divergence:
+## Step 2: Analyze Commits and Changes
 
-!git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null || echo "No merge base found"
-!git log --pretty=format:"%h - %an, %ar : %s" main..HEAD 2>/dev/null || git log --pretty=format:"%h - %an, %ar : %s" master..HEAD 2>/dev/null || git log --pretty=format:"%h - %an, %ar : %s" HEAD~10..HEAD
+Gather comprehensive information about all commits in this PR:
 
-## Step 3: Detailed Commit Analysis
+# Get merge base and commit range
+!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git merge-base HEAD $BASE 2>/dev/null || echo "No merge base found"
 
-Get detailed commit information including full messages and changes:
+# List commits with full details
+!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git log --pretty=format:"COMMIT: %H%nAUTHOR: %an <%ae>%nDATE: %ad%nSUBJECT: %s%nBODY: %b%n---" $BASE..HEAD 2>/dev/null
 
-!git log --pretty=format:"COMMIT: %H%nAUTHOR: %an <%ae>%nDATE: %ad%nSUBJECT: %s%nBODY: %b%n---" main..HEAD 2>/dev/null || git log --pretty=format:"COMMIT: %H%nAUTHOR: %an <%ae>%nDATE: %ad%nSUBJECT: %s%nBODY: %b%n---" master..HEAD 2>/dev/null
-
-## Step 4: Analyze Code Changes
+## Step 3: Analyze Code Changes
 
 Get comprehensive diff information:
 
-!git diff main...HEAD --stat 2>/dev/null || git diff master...HEAD --stat 2>/dev/null || git diff HEAD~5..HEAD --stat
-!git diff main...HEAD --name-status 2>/dev/null || git diff master...HEAD --name-status 2>/dev/null
+# File statistics and change summary
+!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git diff $BASE...HEAD --stat
 
-## Step 5: Determine Project Language
+# File-level changes (Added/Modified/Deleted)
+!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git diff $BASE...HEAD --name-status
 
-Analyze the project to determine the primary language for PR description:
+## Step 4: Determine PR Description Language
 
-!find . -type f -name "*.md" -o -name "*.txt" -o -name "README*" | head -5 | xargs grep -l "한글\|Korean\|한국" 2>/dev/null | head -1
-!git log --oneline -10 | grep -E "(한글|Korean|한국|docs:|chore:|feat:|fix:)" | head -5
+Analyze context to determine the appropriate language for PR description:
 
-## Step 6: Check for Test Files
+# 1. Check recent PR/commit messages language preference
+!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git log --oneline $BASE..HEAD | head -10
 
-Identify test coverage:
+# 2. Check for .github PR template language
+![ -f .github/pull_request_template.md ] && head -20 .github/pull_request_template.md 2>/dev/null || echo "No PR template found"
 
-!find . -type f \( -name "*test*" -o -name "*spec*" \) -newer .git/index 2>/dev/null | head -10 || echo "No recent test changes"
+# 3. Check main README language as project indicator
+![ -f README.md ] && head -30 README.md | tail -20 2>/dev/null || echo "No README found"
 
-## Instructions for PR Creation
+# 4. Analyze team's recent merged PRs (if using gh CLI)
+!gh pr list --state merged --limit 5 --json title,body --jq '.[].title' 2>/dev/null || echo "Unable to fetch recent PRs"
+
+Based on the above context:
+- If PR template exists, follow its language
+- If recent commits/PRs are predominantly in a specific language, use that
+- If mixed or unclear, default to English for international collaboration
+
+## Step 5: Check Test Coverage in PR
+
+Identify test files modified in this PR:
+
+# Check for test file changes in the PR
+!BASE=$(git rev-parse --verify main >/dev/null 2>&1 && echo "main" || (git rev-parse --verify master >/dev/null 2>&1 && echo "master" || echo "HEAD~10")); git diff $BASE...HEAD --name-only | grep -E '(test|spec)\.(js|ts|py|rb|go|java|cpp|c)$|\.(test|spec)\.(js|ts|jsx|tsx)$|_test\.(go|py)$|Test\.(java|cs)$' 2>/dev/null || echo "No test file changes in this PR"
+
+# Check if tests were run
+![ -f package.json ] && grep -q '"test"' package.json && echo "Test script available - remind reviewer to verify tests" || echo "No test configuration detected"
+
+## Step 6: Generate PR Content
 
 Based on the gathered information, create a comprehensive pull request with the following structure:
 
 1. **Determine Target Branch**: Use $ARGUMENTS if provided, otherwise use the default branch (main or master)
 
-2. **Language Selection**: 
-   - Check commit messages, documentation, and code comments
-   - If Korean indicators are found, write in Korean
-   - Otherwise, write in English
+2. **Language Selection Strategy**:
+   - **Primary**: Follow the language of existing PR template if present
+   - **Secondary**: Match the language used in recent team PRs/commits
+   - **Tertiary**: Use the primary language of project documentation
+   - **Default**: Use English for broader accessibility
+   - **Note**: Maintain consistency with team's communication patterns
 
 3. **PR Title Format**:
    - Use conventional commit format if detected in recent commits
@@ -174,17 +194,25 @@ graph LR
    - For API changes, use sequence diagrams
 
 6. **Create the PR**:
-   - Use `gh pr create` with the generated title and body
-   - Set appropriate labels if detected from commit types
-   - Request reviewers if specified in CODEOWNERS
+   - Ensure branch is pushed: `git push -u origin HEAD`
+   - Use `gh pr create --title "[Title]" --body "[Body]" --base [target-branch]`
+   - Auto-detect and set labels based on commit types (feat→enhancement, fix→bug, etc.)
+   - Auto-assign reviewers from CODEOWNERS if available
+   - Add draft flag if WIP or incomplete: `--draft`
 
-## Final Steps
+## Step 7: Create the Pull Request
 
-After generating the comprehensive PR description:
+Execute PR creation with the generated content:
 
-1. Review all sections and ensure completeness
-2. Add any project-specific sections if needed
-3. Create the PR using gh CLI
+1. Ensure all uncommitted changes are handled
+2. Push the current branch if needed:
+   !git push -u origin HEAD 2>/dev/null || echo "Branch already pushed or no remote configured"
+
+3. Create PR using gh CLI with the generated title and body
 4. Return the PR URL to the user
 
-Remember: The goal is to provide reviewers with all the context they need to understand and review the changes effectively without having to dig through commits or ask clarifying questions.
+**Key Principles:**
+- Provide comprehensive context without overwhelming reviewers
+- Use the appropriate language based on team/project conventions
+- Include all relevant technical details and testing information
+- Make it easy for reviewers to understand the impact and test the changes
