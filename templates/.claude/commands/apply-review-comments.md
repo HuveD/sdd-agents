@@ -1,15 +1,15 @@
 ---
 allowed-tools: Read, Edit, MultiEdit, Write, Bash(grep:*), Bash(rg:*), Bash(find:*), Bash(git:*), Bash(go:*), TodoWrite, Grep, Glob, LS, Task, WebSearch
 argument-hint: [review comments]
-description: Apply received code review comments after critical analysis
+description: Apply code review comments using parallel agent processing for improved efficiency
 model: claude-opus-4-1-20250805
 ---
 
 ultrathink
-2
-## Review Feedback Analysis
 
-You are tasked with critically analyzing code review feedback and implementing necessary improvements.
+## Parallel Review Implementation System
+
+You are tasked with critically analyzing code review feedback and implementing improvements using parallel agent processing for maximum efficiency.
 
 ### Context
 Project information:
@@ -22,7 +22,7 @@ $ARGUMENTS
 
 ## Your Task
 
-### Phase 1: Deep Analysis
+### Phase 1: Critical Analysis & Validation
 1. **Context Understanding**:
    - Analyze the current project state and understand the reviewed code's purpose
    - Identify the specific files and functionality being reviewed
@@ -45,50 +45,128 @@ $ARGUMENTS
    - Evaluate if the suggestion might introduce new issues
    - Consider alternative approaches that might be better suited
 
-### Phase 2: Planning
-Based on your analysis, create an improvement plan that:
-1. Prioritizes changes by importance and impact
-2. Groups related changes for logical implementation
-3. Identifies any changes that should NOT be implemented with clear reasoning
-4. Estimates the scope and risk of each change
+### Phase 2: Suggestion Acceptance & Work Grouping
+Based on your critical analysis:
 
-### Phase 3: Implementation
-1. Use TodoWrite to track all planned improvements
-2. Implement changes in priority order:
-   - Start with critical issues
-   - Test each change before moving to the next
-   - Ensure backward compatibility where relevant
-3. For each implemented change:
-   - Verify it doesn't break existing functionality
-   - Check that it follows project conventions
-   - Add or update tests if necessary
+1. **Accept Valid Suggestions**:
+   - List all technically sound and beneficial suggestions
+   - Provide brief justification for acceptance
+   - Reject inappropriate suggestions with clear reasoning
 
-### Phase 4: Verification
-After implementing changes:
-1. Run relevant tests: `sh ./scripts/run_test.sh`
-2. Verify the application still builds and runs correctly
-3. Document any significant architectural decisions or trade-offs made
+2. **Create Independent Work Groups**:
+   - Analyze dependencies between accepted changes
+   - Group changes that can be executed independently:
+     - **Group A**: Changes to independent modules/files
+     - **Group B**: Non-overlapping functionality improvements
+     - **Group C**: Isolated bug fixes or optimizations
+   - Identify sequential dependencies where parallel execution isn't possible
+   - Estimate complexity (Low/Medium/High) for each group
+
+### Phase 3: Parallel Agent Assignment & Execution
+
+1. **Agent Assignment**:
+   - Assign a dedicated agent to each independent work group
+   - Define clear scope and deliverables for each agent
+   - Specify file access requirements and constraints
+
+2. **Parallel Execution using Task Tool**:
+   ```
+   Use the Task tool to launch multiple agents simultaneously:
+   
+   - Agent 1: Handle Group A changes
+     Context: [specific files, functions, requirements]
+     
+   - Agent 2: Handle Group B changes  
+     Context: [specific files, functions, requirements]
+     
+   - Agent 3: Handle Group C changes
+     Context: [specific files, functions, requirements]
+   ```
+   
+   **IMPORTANT**: All independent agents must be launched in a single Task tool call for true parallel execution. Do NOT call agents sequentially.
+
+3. **Agent Work Instructions**:
+   Each agent should:
+   - Focus only on their assigned group
+   - Make all necessary code changes
+   - Verify changes don't break existing functionality
+   - Report completion status and any issues encountered
+
+4. **Synchronization Point**:
+   - Wait for all parallel agents to complete
+   - Collect results from each agent
+   - Identify any conflicts or integration issues
+
+### Phase 4: Integration & Verification
+
+1. **Change Integration**:
+   - Review all changes made by parallel agents
+   - Resolve any conflicts between agent implementations
+   - Ensure consistency across all modifications
+
+2. **Quality Assessment**:
+   - Verify all accepted suggestions were properly implemented
+   - Check for any regressions or new issues
+   - Run comprehensive tests: `sh ./scripts/run_test.sh`
+   - Verify the application builds and runs correctly
+
+3. **Iterative Refinement Loop**:
+   If changes are insufficient or contain issues:
+   - Identify specific problems or missing implementations
+   - Create new work groups for corrections
+   - Launch parallel agents again with refined instructions
+   - Repeat until all requirements are satisfied
+   
+   **Loop Conditions**:
+   - Continue if critical suggestions weren't properly addressed
+   - Continue if tests fail or regressions are detected
+   - Exit when all accepted changes are correctly implemented
 
 ## Output Format
 
 Provide your analysis and actions in the following structure:
 
-1. **Review Analysis Summary**
-   - List each review comment with your critical assessment
-   - Categorize by priority (Critical/Important/Nice-to-have/Rejected)
-   - Provide reasoning for any rejected suggestions
+1. **Critical Analysis Results**
+   - Each review comment with assessment
+   - Acceptance/Rejection status with reasoning
+   - Priority classification (Critical/Important/Nice-to-have)
 
-2. **Implementation Plan**
-   - Ordered list of changes to implement
-   - Estimated complexity and risk for each
+2. **Work Group Organization**
+   - Independent groups identified
+   - Changes assigned to each group
+   - Dependencies and constraints noted
+   - Parallel execution feasibility confirmed
 
-3. **Implementation Progress**
-   - Track each change as you implement it
-   - Note any issues or deviations from the plan
+3. **Parallel Agent Execution**
+   - Agent assignments and launch command
+   - Real-time status tracking
+   - Completion confirmation from each agent
 
-4. **Final Summary**
-   - Changes successfully implemented
-   - Changes skipped with reasoning
-   - Any follow-up work recommended
+4. **Integration Report**
+   - Changes from each agent summarized
+   - Conflicts resolved (if any)
+   - Test results and verification status
 
-Remember: Not all review feedback is correct or appropriate. Your role is to be a critical thinker who implements improvements that genuinely benefit the project while respectfully explaining why certain suggestions might not be suitable.
+5. **Iteration Status** (if applicable)
+   - Issues identified requiring re-work
+   - New agent assignments for corrections
+   - Loop iteration count and progress
+
+6. **Final Summary**
+   - All changes successfully implemented
+   - Total execution time comparison (parallel vs sequential estimate)
+   - Any remaining recommendations
+
+## Execution Guidelines
+
+1. **Critical Thinking**: Not all review feedback is correct. Evaluate each suggestion critically before acceptance.
+
+2. **Parallel Efficiency**: Maximize parallel execution by identifying truly independent work groups. The more agents working simultaneously, the faster the completion.
+
+3. **Task Tool Usage**: Always use the Task tool to launch multiple agents in a single call for true parallel processing. Sequential agent calls defeat the purpose of this workflow.
+
+4. **Quality Over Speed**: While parallel execution improves speed, maintain quality through proper verification and iteration when needed.
+
+5. **Clear Communication**: Each agent needs precise, unambiguous instructions to work independently without conflicts.
+
+Remember: The goal is to leverage parallel processing to dramatically reduce implementation time while maintaining or improving code quality through systematic verification and iteration.
