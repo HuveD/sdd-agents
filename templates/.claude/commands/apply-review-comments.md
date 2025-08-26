@@ -65,47 +65,26 @@ Based on your critical analysis:
 
 ### Phase 3: Parallel Agent Assignment & Execution
 
+**🚨 CRITICAL INSTRUCTION FOR TRUE PARALLEL EXECUTION 🚨**
+> "Launch multiple agents concurrently whenever possible, to maximize performance; to do that, use a single message with multiple tool uses"
+> -- From https://claudelog.com/mechanics/task-agent-tools/
+
 1. **Agent Assignment**:
    - Assign a dedicated agent to each independent work group
    - Define clear scope and deliverables for each agent
    - Specify file access requirements and constraints
 
-2. **Parallel Execution Strategy**:
-   **CRITICAL**: You MUST launch ALL independent agents simultaneously in a SINGLE message for true parallel execution.
+2. **TRUE Parallel Execution - MANDATORY APPROACH**:
    
-   Example structure for launching 3 independent groups:
+   **THE GOLDEN RULE**: You MUST launch ALL independent agents in a SINGLE message with multiple Task tool calls for concurrent execution.
+   
+   **✅ CORRECT - True Parallel Execution Example**:
    ```
-   "I'll now launch all agents in parallel to work on their independent groups simultaneously."
+   "I'll launch all 3 agents concurrently to work on their independent groups:"
    
-   [Task Tool Call 1]: Agent for Group A
-   [Task Tool Call 2]: Agent for Group B  
-   [Task Tool Call 3]: Agent for Group C
-   
-   All above Task calls must be in the SAME message, executed at once.
-   ```
-   
-   **FORBIDDEN PATTERNS**:
-   - ❌ "Let me first launch Agent A..." [Task call] "Now Agent B..." [Task call]
-   - ❌ "Starting with Group A..." [Task call] "Next, Group B..." [Task call]
-   - ❌ Sequential messages with individual Task calls
-   
-   **REQUIRED PATTERN**:
-   - ✅ Single message containing multiple Task tool invocations
-   - ✅ All Task calls batched together for simultaneous execution
-   - ✅ No intermediate text between Task calls suggesting sequence
-
-3. **Agent Work Instructions**:
-   Each agent should:
-   - Focus only on their assigned group
-   - Make all necessary code changes
-   - Verify changes don't break existing functionality
-   - Report completion status and any issues encountered
-
-4. **Synchronization Point**:
-   - After launching all parallel agents, wait for ALL to complete
-   - Collect results from each agent simultaneously
-   - Identify any conflicts or integration issues
-   - Do NOT proceed until all parallel agents have finished
+   <function_calls>
+   <invoke name="Task">
+     <parameter name="prompt">Agent A: Implement authentication improvements...
 
 ### Phase 4: Integration & Verification
 
