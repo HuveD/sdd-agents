@@ -1,7 +1,7 @@
 ---
 description: 프로젝트를 자동 분석하여 도메인별 사양서를 체계적으로 작성/업데이트합니다 (언어/프레임워크 중립적)
 argument-hint: "[옵션: --domains <domain1,domain2>]"
-model: sonnet
+model: claude-sonnet-4-20250514
 allowed-tools:
   - Read
   - LS
