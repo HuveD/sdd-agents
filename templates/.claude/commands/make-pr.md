@@ -1,127 +1,52 @@
----
-description: Create a pull request with comprehensive analysis and documentation
-allowed-tools:
-  - Bash
-  - Read
-model: claude-sonnet-4-20250514
-argument-hint: "<base-branch> (required - e.g., main, develop, staging)"
----
+# Pull Request 생성
 
-# Create Pull Request
+검토자를 위한 상세 분석 및 컨텍스트를 포함하는 포괄적인 Pull Request를 생성합니다.
 
-Create a comprehensive pull request with detailed analysis and context for reviewers.
+## Step 1: 커밋 분석
 
-**Usage**: `/make-pr <base-branch>`
-**Example**: `/make-pr main` or `/make-pr develop`
+전체적인 diff 통계와 파일 변경 목록을 가져옵니다.
+이 PR에 포함될 모든 커밋을 원격 저장소의 기본 브랜치와 비교하여 검토합니다.
 
-## Step 1: Validate Input and Context
 
-Check if base branch is provided and validate current state:
+## Step 2: Pull Request 내용 생성
 
-!if [ -z "$ARGUMENTS" ]; then echo "ERROR: Base branch is required. Usage: /make-pr <base-branch>"; exit 1; else echo "Creating PR against base branch: $ARGUMENTS"; fi
+위 분석 내용을 바탕으로 아래 구조에 맞춰 포괄적인 Pull Request를 생성합니다.
 
-!git branch --show-current
-!git status --short
+### PR 제목 형식
+- 프로젝트에서 Conventional Commit 형식을 사용하는 경우 해당 형식을 따릅니다.
+- 형식: `타입: 간략한 설명`
+- 타입 예시: feat, fix, docs, refactor, test, chore, perf
 
-## Step 2: Analyze Commits
-
-Review all commits that will be included in this PR:
-
-!git log --pretty=format:"📝 %h - %s (%an, %ar)" $ARGUMENTS..HEAD 2>/dev/null || echo "Cannot compare with $ARGUMENTS branch. Please ensure it exists."
-!git log --pretty=format:"COMMIT: %H%nAUTHOR: %an <%ae>%nDATE: %ad%nSUBJECT: %s%nBODY: %b%n---" $ARGUMENTS..HEAD 2>/dev/null
-
-## Step 3: Analyze Changes
-
-Get comprehensive diff statistics and file changes:
-
-!git diff $ARGUMENTS...HEAD --stat 2>/dev/null || echo "Cannot generate diff statistics"
-!git diff $ARGUMENTS...HEAD --name-status 2>/dev/null || echo "Cannot list file changes"
-
-## Step 4: Check Test Coverage
-
-Identify test-related changes in this PR:
-
-!git diff $ARGUMENTS...HEAD --name-only | grep -E '(test|spec)\.(js|ts|py|rb|go|java|cpp|c)$|\.(test|spec)\.(js|ts|jsx|tsx)$|_test\.(go|py)$|Test\.(java|cs)$' 2>/dev/null || echo "No test file changes detected"
-
-## Step 5: Check Documentation Context
-
-Review project context for PR language preference:
-
-![ -f .github/pull_request_template.md ] && head -20 .github/pull_request_template.md 2>/dev/null || echo "No PR template found"
-!gh pr list --state merged --limit 3 --json title --jq '.[].title' 2>/dev/null || echo "Unable to fetch recent PRs"
-
-## Step 6: Generate Pull Request
-
-Based on the analysis above, create a comprehensive pull request following this structure:
-
-### PR Title Format
-- Use conventional commit format if detected in the project
-- Format: `[type]: Brief description`
-- Types: feat, fix, docs, refactor, test, chore, perf
-
-### PR Body Template
+### PR 본문 템플릿
 
 ```markdown
-## 📋 Summary
-[2-3 sentences describing what this PR accomplishes]
+## 📋 요약
+[이 PR이 달성하는 목표를 2-3 문장으로 설명합니다.]
 
-## 🎯 Purpose
-[Why these changes are needed]
-- Problem being solved
-- Related issues: #[issue-number]
+## 🎯 목적
+[이 변경 사항이 왜 필요한지 설명합니다.]
+- 해결하려는 문제
+- 관련 이슈: #[이슈-번호]
 
-## 📝 Changes
-### Modified Components
-- **[Component/File]**: [What changed and why]
-- **[Component/File]**: [What changed and why]
+## 📝 변경 내용
+### 수정한 컴포넌트
+- **[컴포넌트/파일]**: [무엇을 왜 변경했는지 설명]
+- **[컴포넌트/파일]**: [무엇을 왜 변경했는지 설명]
 
-### Technical Details
-- [Key technical decision and rationale]
-- [Implementation approach]
+### 기술적 상세
+- [주요 기술적 결정 및 근거]
+- [구현 접근 방식]
 
-## 🧪 Testing
-### Test Coverage
-- [ ] Unit tests added/updated
-- [ ] Integration tests added/updated  
-- [ ] Manual testing completed
-
-### How to Test
-1. [Step-by-step testing instructions]
-2. [Expected results]
-
-## 📸 Screenshots
-[Include if UI changes are present]
-
-## ✅ Checklist
-- [ ] Code follows project guidelines
-- [ ] Self-review completed
-- [ ] Documentation updated
-- [ ] Tests passing
-- [ ] No debug code left
-
-## 🔗 Related
-- Issue: #[number]
-- Documentation: [link]
-
----
-🤖 Generated with [Claude Code](https://claude.ai/code)
+## 🔗 관련 링크
+- 이슈: #[번호 or commit]
+- 문서: [링크]
 ```
 
-## Step 7: Create the PR
+## Step 3: Pull Request 생성 실행
 
-Execute the pull request creation:
+분석된 내용을 바탕으로 실제 Pull Request를 생성합니다.
+중요: `--base` 없이 pr을 생성하세요.
 
-1. Push current branch to remote:
-!git push -u origin HEAD 2>/dev/null || echo "Branch already pushed or push failed"
-
-2. Create PR using gh CLI with base branch $ARGUMENTS:
-- Use the generated title and body
-- Set base branch to: $ARGUMENTS
-- Return the PR URL
-
-**Important Instructions:**
-- Base branch MUST be set to the value provided in $ARGUMENTS
-- Generate comprehensive but concise PR description
-- Follow project's language conventions (check recent PRs/commits)
-- Include all relevant technical context for reviewers
-- Make the PR self-documenting and easy to review
+- 아직 push가 안된 경우 현재 로컬 커밋된 내용을 원격 저장소에 푸시합니다. 
+- `gh` CLI를 사용하여 저장소의 기본 브랜치로 PR을 생성합니다. (아래 명령어의 제목과 본문을 Step 5에서 생성된 내용으로 채워서 실행하세요.)
+!gh pr create --title "여기에 생성된 PR 제목을 입력하세요" --body "여기에 생성된 PR 본문을 입력하세요"
