@@ -59,3 +59,4 @@
 - Prioritize clarity and maintainability
 - Favor explicitness over implicitness
 - **SDD principles take precedence over discovered patterns**
+- Do not alter production code to make tests pass; adjust the test environment instead when necessary.
