@@ -41,7 +41,7 @@
 
 ### 9. Self-Documenting Code & WHY-Only Comments
 - Clear naming & structure; comments explain **WHY**, not WHAT/HOW.
-- Tags: `[PERFORMANCE] [SECURITY] [TEMP] [BUSINESS] [LEGAL]`.
+- Tags: `[PERFORMANCE] [SECURITY] [TEMP] [BUSINESS] [LEGAL] [PATTERN] [SPEC]`.
 
 ---
 
