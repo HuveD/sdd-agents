@@ -1,3 +1,8 @@
+---
+description: Make pr request
+model: claude-haiku-4-5-20251001
+---
+
 # Pull Request 생성
 
 검토자를 위한 상세 분석 및 컨텍스트를 포함하는 포괄적인 Pull Request를 생성합니다.

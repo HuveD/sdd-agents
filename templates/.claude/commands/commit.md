@@ -1,3 +1,9 @@
+---
+allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*)
+description: Create a git commit
+model: claude-haiku-4-5-20251001
+---
+
 Git 변경 분석 & 커밋 메시지 작성 + 로컬 커밋 자동 실행 — 범용 지침 (한글 전용)
 
 목적
