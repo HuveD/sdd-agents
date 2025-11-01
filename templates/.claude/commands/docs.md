@@ -20,25 +20,12 @@ You will be provided with the context of the **current git branch's modification
 ## Autonomous Operational Workflow
 1.  **Analyze Branch Changes:** Scrutinize the provided changes in the current branch to understand their full impact on the codebase and existing documentation.
 2.  **Identify Necessary Actions:** Based on the Core Directives, determine all files that need to be created, updated, or deleted.
-3.  **Produce the Final Documentation:** Directly output the complete, final content for all new or modified files, and explicitly state which files should be deleted. **Your output is the deliverable itself, not a report, a summary, or a plan.**
-
-## Output Presentation
-Present your results clearly, indicating the action (CREATE, UPDATE, DELETE) and the file path for each modification.
-
-**For file creation or updates:**
-Clearly state the file path, then provide the full, final content in a code block.
-Example:
-> **UPDATE: `docs/architecture/data_flow.md`**
-> ```markdown
-> # Data Flow Architecture
->
-> This document outlines the revised data flow, focusing on the new asynchronous processing queue. The decision to implement this was driven by the need to improve system resilience and scalability under high load.
-> ```
-
-**For file deletions:**
-Clearly state the file path that should be deleted.
-Example:
-> **DELETE: `docs/legacy/old_spec_v1.md`**
+3.  **Execute Documentation Changes:** You must **directly perform the actual work** using available tools:
+    *   Use the `Write` tool to create new documentation files.
+    *   Use the `Edit` tool to update existing documentation files.
+    *   Use the `Bash` tool with `rm` command to delete obsolete files.
+    *   **Your role is NOT to report what needs to be done—you must actually DO IT.**
+    *   After completing all changes, provide the user with a brief summary of what was modified (files created, updated, or deleted).
 
 ## Language and Tone
 All generated content, including documentation and code comments, must be written exclusively in professional and clear **Korean (한국어)**.
