@@ -4,7 +4,7 @@
   "description": "AI Agent Workflow System for Spec-Driven Development (SDD)",
   "main": "lib/installer.js",
   "bin": {
-    "sdd-agents": "./bin/sdd-agents"
+    "sdd-agents": "bin/sdd-agents"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/sdd-agents.git"
+    "url": "git+https://github.com/your-org/sdd-agents.git"
   },
   "homepage": "https://github.com/your-org/sdd-agents#readme",
   "bugs": {
