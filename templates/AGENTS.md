@@ -8,7 +8,7 @@
 ### 1. Specification-Driven Development Methodology
 - Development is always based on specifications located in `docs/specs/`.
 - When new specifications are added or existing ones need to be modified, the corresponding specification documents must be updated.
-- Specifications must be written in accordance with the guidelines in `@docs/templates/spec-writing-guide.md`.
+- Specifications must be written in accordance with the guidelines in `@.agent/templates/spec-writing-guide.md`.
 - Each specification document should always remain as a single, finalized version.
 
 ### 2. Understand the Project Using `@PROJECT.md`
@@ -43,9 +43,13 @@
 - Clear naming & structure; comments explain **WHY**, not WHAT/HOW.
 - Tags: `[PERFORMANCE] [SECURITY] [TEMP] [BUSINESS] [LEGAL] [PATTERN] [SPEC]`.
 
+### 10. ExecPlans for Complex Work
+- When writing complex features or significant refactors, use an ExecPlan (as described in `.agent/PLANS.md`) from design to implementation.
+
 ---
 
 ## 🔄 Development Workflow
+- For complex features or significant refactors, prepare and maintain an ExecPlan alongside this workflow.
 1. Start with specifications (read/update)
 2. Write tests for business logic
 3. Implement following SRP

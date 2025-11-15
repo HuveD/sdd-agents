@@ -6,7 +6,7 @@ Ensure every agent specification is authored and reviewed in strict alignment wi
 ## Author Checklist
 
 ### Pre-Writing Requirements
-- [ ] Thoroughly review `docs/templates/spec-writing-guide.md`
+- [ ] Thoroughly review `.agent/templates/spec-writing-guide.md`
 - [ ] Understand the distinction between Spec vs API documentation vs Design documents
 
 ### Writing Mandates
@@ -29,7 +29,7 @@ Ensure every agent specification is authored and reviewed in strict alignment wi
 - [ ] Is this a final specification (not a partial update or draft)?
 
 ### Content Verification
-- [ ] Does it pass all requirements in `docs/templates/spec-review-guide.md`?
+- [ ] Does it pass validation via `/validate-specs` command?
 - [ ] Are Acceptance Criteria (AC) measurable and testable?
 - [ ] Are business logic and policies clearly documented?
 

@@ -40,7 +40,7 @@
 
 1.  **Specification 문서 작성 및 갱신** (`docs/specs/`)
     *   기능의 WHAT과 WHY를 최종 형태로 작성
-    *   `docs/templates/spec-writing-guide.md`의 표준을 따름
+    *   `.agent/templates/spec-writing-guide.md`의 표준을 따름
     *   새 기능 구현 시 새 스펙 작성, 기존 기능 변경 시 해당 스펙 전체를 재작성
 
 2.  **기술 설명 문서** (`docs/technical/`, `docs/guides/` 등)
