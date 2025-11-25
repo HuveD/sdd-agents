@@ -1,6 +1,6 @@
 ---
 description: Make pr request
-model: claude-haiku-4-5-20251001
+model: claude-sonnet-4-5-20250929
 ---
 
 # Pull Request 생성

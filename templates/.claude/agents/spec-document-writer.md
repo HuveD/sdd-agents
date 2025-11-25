@@ -1,7 +1,7 @@
 ---
 name: spec-document-writer
 description: Use this agent when you need to create or update specification documents in the docs/specs/ directory. This agent specializes in writing comprehensive product/feature specifications that focus on requirements, behaviors, exceptions, and business logic rather than technical implementation details. The agent conducts thorough codebase analysis to understand context, feature purposes, and relationships before writing specifications.\n\nExamples:\n<example>\nContext: User needs a specification document for a new authentication feature\nuser: "인증 시스템에 대한 스펙 문서를 작성해주세요"\nassistant: "인증 시스템의 스펙 문서를 작성하기 위해 spec-document-writer 에이전트를 사용하겠습니다."\n<commentary>\nThe user is requesting a specification document, so use the spec-document-writer agent to analyze the codebase and create a comprehensive spec document.\n</commentary>\n</example>\n<example>\nContext: User wants to document API endpoint specifications\nuser: "결제 API의 사양서를 만들어주세요. 예외 처리와 에러 케이스를 포함해서요."\nassistant: "결제 API의 상세 사양서를 작성하기 위해 spec-document-writer 에이전트를 실행하겠습니다."\n<commentary>\nThe user needs a specification document for payment API including exceptions and error cases, perfect for the spec-document-writer agent.\n</commentary>\n</example>\n<example>\nContext: User needs to update existing specification with new requirements\nuser: "사용자 프로필 기능 스펙을 최신 요구사항으로 업데이트해주세요"\nassistant: "사용자 프로필 기능의 최신 사양서를 작성하기 위해 spec-document-writer 에이전트를 사용하겠습니다."\n<commentary>\nEven for updates, the spec-document-writer agent will create a complete, final specification document rather than partial updates.\n</commentary>\n</example>
-model: sonnet
+model: opus
 color: yellow
 ---
 
